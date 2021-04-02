@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.stereotype.Component;
 import uoc.edu.easyorderbackend.constants.UrlEasyOrderConstants;
@@ -31,11 +32,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         logger.info("SecurityConfig: Configuring http");
+
+        // AuthorizeRequests makes apiUrl to check method authenticate from Provider
         http.addFilterBefore(new FirebaseIdTokenFilter(), BasicAuthenticationFilter.class)
                 .csrf().disable()
-                .authorizeRequests()
+                /*.authorizeRequests()
                 .antMatchers(UrlEasyOrderConstants.apiUrl)
-                .authenticated();
+                .authenticated()
+                .and()*/.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     @Override
