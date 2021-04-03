@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import uoc.edu.easyorderbackend.constants.UrlEasyOrderConstants;
 import uoc.edu.easyorderbackend.exceptions.EasyOrderException;
 import uoc.edu.easyorderbackend.model.Message;
+import uoc.edu.easyorderbackend.model.User;
 import uoc.edu.easyorderbackend.model.UserAuth;
 import uoc.edu.easyorderbackend.service.UserService;
 
@@ -30,8 +31,8 @@ public class UserController {
         try {
             if (userAuth != null && StringUtils.isNotBlank(userAuth.getEmail()) && StringUtils.isNotBlank(userAuth.getPassword())
                     && StringUtils.isNotBlank(userAuth.getUsername())) {
-                UserAuth newUserAuth = userService.createUserWithEmailAndPassword(userAuth);
-                response = new ResponseEntity(newUserAuth, HttpStatus.OK);
+                User newUser = userService.createUserWithEmailAndPassword(userAuth);
+                response = new ResponseEntity(newUser, HttpStatus.OK);
             } else {
                 response = new ResponseEntity(new Message("Username, Email or Password is empty"), HttpStatus.BAD_REQUEST);
             }

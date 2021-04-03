@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
     private UserDaoImpl userDao;
 
     @Override
-    public UserAuth createUserWithEmailAndPassword(UserAuth userAuth) throws EasyOrderException, FirebaseAuthException {
+    public User createUserWithEmailAndPassword(UserAuth userAuth) throws EasyOrderException, FirebaseAuthException {
         logger.info("FirebaseService: creating User with email and password");
 
         //Create request
@@ -44,19 +44,12 @@ public class UserServiceImpl implements UserService {
         claims.put("isClient", userAuth.getIsClient() != null ? userAuth.getIsClient() : true);
         firebaseAuth.setCustomUserClaims(userRecord.getUid(), claims);
 
-        //Return new userAuth
-        UserAuth newUserAuth = new UserAuth(userRecord);
-        newUserAuth.setUsername(userAuth.getUsername());
-        newUserAuth.setEmail(userAuth.getEmail());
-        newUserAuth.setIsClient(userAuth.getIsClient());
-        newUserAuth.setEmailVerified(false);
-
         //Create user in DB
         User newUser = new User(userRecord.getUid(), userAuth.getUsername(), userAuth.getEmail(), false, userAuth.getIsClient());
         userDao.save(newUser);
 
         logger.info("FirebaseService: User created");
-        return newUserAuth;
+        return newUser;
     }
 
     @Autowired

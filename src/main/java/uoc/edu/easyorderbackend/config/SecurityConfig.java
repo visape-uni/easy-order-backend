@@ -36,10 +36,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // AuthorizeRequests makes apiUrl to check method authenticate from Provider
         http.addFilterBefore(new FirebaseIdTokenFilter(), BasicAuthenticationFilter.class)
                 .csrf().disable()
-                /*.authorizeRequests()
+                .authorizeRequests()
                 .antMatchers(UrlEasyOrderConstants.apiUrl)
                 .authenticated()
-                .and()*/.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .antMatchers(UrlEasyOrderConstants.userUrl).permitAll()
+                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     @Override
