@@ -13,7 +13,7 @@ public class MyExceptionHandler {
     // handle specific exceptions
     @ExceptionHandler(EasyOrderException.class)
     public ResponseEntity<?> handleEasyOrderException(EasyOrderException exception, WebRequest request) {
-        return new ResponseEntity(exception, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(exception, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(SecurityException.class)
