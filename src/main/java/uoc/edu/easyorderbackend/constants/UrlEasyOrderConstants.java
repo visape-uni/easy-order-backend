@@ -10,4 +10,5 @@ public final class UrlEasyOrderConstants {
     public static final String restaurantUrl = apiUrl + "/restaurant";
 
     public static final String createUrl = "/create";
+    public static final String getUrl = "/get/{uid}";
 }

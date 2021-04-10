@@ -8,4 +8,5 @@ import uoc.edu.easyorderbackend.model.UserAuth;
 
 public interface UserService {
     User createUserWithEmailAndPassword(UserAuth userAuth);
+    User getUserProfile(String uid);
 }

@@ -17,6 +17,8 @@ import uoc.edu.easyorderbackend.service.UserService;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -55,6 +57,22 @@ public class UserServiceImpl implements UserService {
         } catch (FirebaseAuthException e) {
             logger.error("UserService: {}", e.getMessage());
             throw new EasyOrderBackendException(HttpStatus.UNAUTHORIZED , "Firebase error: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public User getUserProfile(String uid) {
+        try {
+            Optional<User> optionalUser = userDao.get(uid);
+            if (optionalUser.isPresent()) {
+                return optionalUser.get();
+            } else {
+                throw new EasyOrderBackendException(HttpStatus.NOT_FOUND, "User not found");
+            }
+        } catch (ExecutionException e) {
+            throw new EasyOrderBackendException(HttpStatus.INTERNAL_SERVER_ERROR, "Backend server error: Process aborted");
+        } catch (InterruptedException e) {
+            throw new EasyOrderBackendException(HttpStatus.INTERNAL_SERVER_ERROR, "Backend server error: Process interrupted");
         }
     }
 

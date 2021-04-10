@@ -39,6 +39,21 @@ public class UserController {
         return response;
     }
 
+    @GetMapping(UrlEasyOrderConstants.getUrl)
+    public ResponseEntity<User> getUserProfile(@PathVariable String uid) {
+        logger.info("UserController: GetUserProfile");
+        ResponseEntity<User> response;
+        if (uid != null) {
+            User userProfile = userService.getUserProfile(uid);
+            response = new ResponseEntity<>(userProfile, HttpStatus.OK);
+        } else {
+            throw new EasyOrderBackendException(HttpStatus.BAD_REQUEST, "UserId is empty");
+        }
+
+        logger.info("UserController: Giving response");
+        return response;
+    }
+
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;

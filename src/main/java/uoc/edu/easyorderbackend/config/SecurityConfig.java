@@ -43,7 +43,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(UrlEasyOrderConstants.apiUrl+"/**") // ** Makes that all the urls that start with API must be authenticated
                 .authenticated()
-                .antMatchers(UrlEasyOrderConstants.userUrl).permitAll()
+                .antMatchers(UrlEasyOrderConstants.userUrl+UrlEasyOrderConstants.getUrl)
+                .authenticated()
+                .antMatchers(UrlEasyOrderConstants.userUrl+UrlEasyOrderConstants.createUrl).permitAll()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().exceptionHandling().authenticationEntryPoint(authenticationEntryPoint());
 
