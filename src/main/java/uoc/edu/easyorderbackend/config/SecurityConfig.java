@@ -3,16 +3,20 @@ package uoc.edu.easyorderbackend.config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.stereotype.Component;
 import uoc.edu.easyorderbackend.constants.UrlEasyOrderConstants;
 import uoc.edu.easyorderbackend.filter.FirebaseIdTokenFilter;
+import uoc.edu.easyorderbackend.handler.RestAuthenticationEntryPoint;
 import uoc.edu.easyorderbackend.provider.FirebaseIdTokenAuthenticationProvider;
 
 @EnableWebSecurity
@@ -34,13 +38,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         logger.info("SecurityConfig: Configuring http");
 
         // AuthorizeRequests makes apiUrl to check method authenticate from Provider
-        http.addFilterBefore(new FirebaseIdTokenFilter(), BasicAuthenticationFilter.class)
+        http.addFilterBefore(new FirebaseIdTokenFilter(authenticationEntryPoint(), authenticationProvider), BasicAuthenticationFilter.class)
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers(UrlEasyOrderConstants.apiUrl)
+                .antMatchers(UrlEasyOrderConstants.apiUrl+"/**") // ** Makes that all the urls that start with API must be authenticated
                 .authenticated()
                 .antMatchers(UrlEasyOrderConstants.userUrl).permitAll()
-                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().exceptionHandling().authenticationEntryPoint(authenticationEntryPoint());
+
     }
 
     @Override
@@ -49,4 +55,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(authenticationProvider);
     }
 
+    @Bean
+    public AuthenticationEntryPoint authenticationEntryPoint() {
+        return new RestAuthenticationEntryPoint();
+    }
 }

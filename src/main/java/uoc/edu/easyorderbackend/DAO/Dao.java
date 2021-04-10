@@ -14,7 +14,7 @@ public interface Dao<T> {
 
     List<T> getAll();
 
-    void save(T t) throws Exception;
+    String save(T t) throws Exception;
 
     void update(T t, String[] params);
 

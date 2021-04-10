@@ -6,10 +6,14 @@ import com.google.firebase.auth.FirebaseToken;
 import com.google.firebase.auth.UserRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.authentication.www.NonceExpiredException;
 import org.springframework.stereotype.Component;
+import uoc.edu.easyorderbackend.exceptions.EasyOrderBackendException;
 import uoc.edu.easyorderbackend.model.FirebaseAuthenticationToken;
 import uoc.edu.easyorderbackend.model.UserAuth;
 
@@ -18,7 +22,7 @@ public class FirebaseIdTokenAuthenticationProvider implements AuthenticationProv
     public static final Logger logger = LoggerFactory.getLogger(FirebaseIdTokenAuthenticationProvider.class);
 
     @Override
-    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+    public Authentication authenticate(Authentication authentication) throws BadCredentialsException {
         FirebaseAuthenticationToken token = (FirebaseAuthenticationToken) authentication;
         try {
             FirebaseToken firebaseToken = FirebaseAuth.getInstance().verifyIdToken(token.getIdToken(), true);
@@ -31,9 +35,9 @@ public class FirebaseIdTokenAuthenticationProvider implements AuthenticationProv
 
             logger.error("FirebaseIdTokenAuthenticationProvider: {}", e.getMessage());
             if (e.getErrorCode().equals("id-token-revoked")) {
-                throw new SecurityException("User token has been revoked, please sign in again!");
+                throw new BadCredentialsException("User token has been revoked, please sign in again!");
             } else {
-                throw new SecurityException("Authentication failed!");
+                throw new BadCredentialsException("Authentication failed, wrong token!");
             }
         }
     }
@@ -41,5 +45,20 @@ public class FirebaseIdTokenAuthenticationProvider implements AuthenticationProv
     @Override
     public boolean supports(Class<?> aClass) {
         return aClass.isAssignableFrom(FirebaseAuthenticationToken.class);
+    }
+
+    public void validateToken(Authentication authentication) throws BadCredentialsException{
+        FirebaseAuthenticationToken token = (FirebaseAuthenticationToken) authentication;
+        try {
+            logger.info("FirebaseIdTokenAuthenticationProvider: validating Token");
+            FirebaseAuth.getInstance().verifyIdToken(token.getIdToken(), true);
+        } catch (FirebaseAuthException e) {
+            logger.error("FirebaseIdTokenAuthenticationProvider: {}", e.getMessage());
+            if (e.getErrorCode().equals("id-token-revoked")) {
+                throw new BadCredentialsException("User token has been revoked, please sign in again!");
+            } else {
+                throw new BadCredentialsException("Authentication failed, wrong token!");
+            }
+        }
     }
 }

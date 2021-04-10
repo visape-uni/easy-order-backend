@@ -5,25 +5,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import uoc.edu.easyorderbackend.exceptions.EasyOrderBackendException;
 import uoc.edu.easyorderbackend.exceptions.EasyOrderException;
 
 @ControllerAdvice
 public class MyExceptionHandler {
 
     // handle specific exceptions
-    @ExceptionHandler(EasyOrderException.class)
-    public ResponseEntity<?> handleEasyOrderException(EasyOrderException exception, WebRequest request) {
-        return new ResponseEntity<>(exception, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    @ExceptionHandler(SecurityException.class)
-    public ResponseEntity<?> handleSecurityException (SecurityException exception, WebRequest request) {
-        return new ResponseEntity<>(exception, HttpStatus.UNAUTHORIZED);
+    @ExceptionHandler(EasyOrderBackendException.class)
+    public ResponseEntity<EasyOrderException> handleEasyOrderException(EasyOrderBackendException exception, WebRequest request) {
+        return new ResponseEntity<>(new EasyOrderException(exception.getMessage()),
+                exception.getStatus());
     }
 
     // handle global exceptions
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> handleSecurityException (Exception exception, WebRequest request) {
-        return new ResponseEntity<>(exception, HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<EasyOrderException> handleSecurityException (Exception exception, WebRequest request) {
+
+        return new ResponseEntity<>(new EasyOrderException(exception.getMessage()),
+                HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
