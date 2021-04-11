@@ -1,37 +1,28 @@
 package uoc.edu.easyorderbackend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Worker extends User {
-    private List<Table> tableAlerts;
+    private String idRestaurant;
 
     public Worker() {
-        tableAlerts  = new ArrayList<>();
     }
 
-    public Worker(List<Table> tableAlerts) {
-        this.tableAlerts = tableAlerts;
+    public Worker(String uid, String username, String email, Boolean isEmailVerified, String idRestaurant) {
+        super(uid, username, email, isEmailVerified, false);
+        this.idRestaurant = idRestaurant;
     }
 
-    public List<Table> getTableAlerts() {
-        return tableAlerts;
+    public String getRestaurant() {
+        return idRestaurant;
     }
 
-    public void setTableAlerts(List<Table> tableAlerts) {
-        this.tableAlerts = tableAlerts;
-    }
-
-    public boolean addTableAlert(Table tableAlert) {
-        boolean added = false;
-        if (!tableAlerts.contains(tableAlert)) {
-            tableAlerts.add(tableAlert);
-            added = true;
-        }
-        return added;
-    }
-
-    public boolean removeTableAlert(Table tableAlert) {
-        return tableAlerts.remove(tableAlert);
+    public void setRestaurant(String restaurant) {
+        this.idRestaurant = idRestaurant;
     }
 }

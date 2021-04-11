@@ -11,7 +11,10 @@ import uoc.edu.easyorderbackend.DAO.Dao;
 import uoc.edu.easyorderbackend.constants.DbEasyOrderConstants;
 import uoc.edu.easyorderbackend.exceptions.EasyOrderBackendException;
 import uoc.edu.easyorderbackend.firebase.FirebaseInitialize;
+import uoc.edu.easyorderbackend.model.Client;
+import uoc.edu.easyorderbackend.model.Restaurant;
 import uoc.edu.easyorderbackend.model.User;
+import uoc.edu.easyorderbackend.model.Worker;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +32,16 @@ public class UserDaoImpl implements Dao<User> {
         usersColRef = getCollection();
         DocumentReference userDocRef = usersColRef.document(id);
         ApiFuture<DocumentSnapshot> userSnapshot = userDocRef.get();
-        User user = userSnapshot.get().toObject(User.class);
+        User user;
+        if ((Boolean) userSnapshot.get().get("isClient")) {
+            // isClient
+            user = userSnapshot.get().toObject(Client.class);
+        } else {
+            // isWorker
+            user = userSnapshot.get().toObject(Worker.class);
+
+            // TODO: GET RESTAURANT OF WORKER IF NOT NULL
+        }
         logger.info("UserDao: user successfully obtained");
         return Optional.ofNullable(user);
     }

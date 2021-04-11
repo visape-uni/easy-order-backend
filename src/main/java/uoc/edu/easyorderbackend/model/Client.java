@@ -1,36 +1,22 @@
 package uoc.edu.easyorderbackend.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import java.util.ArrayList;
 import java.util.List;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Client extends User {
-    private List<Aliment> favouriteAliments;
     private List<Aliment> allergies;
 
     public Client() {
         super();
+        allergies = new ArrayList<>();
     }
 
-    public Client(List<Aliment> favouriteAliments, List<Aliment> allergies) {
+    public Client(List<Aliment> allergies) {
         super();
-        this.favouriteAliments = favouriteAliments;
         this.allergies = allergies;
-    }
-
-    public List<Aliment> getFavouriteAliments() {
-        return favouriteAliments;
-    }
-
-    public void setFavouriteAliments(List<Aliment> favouriteAliments) {
-        this.favouriteAliments = favouriteAliments;
-    }
-
-    public Boolean addFavouriteAliments(Aliment aliment) {
-        boolean added = false;
-        if (!favouriteAliments.contains(aliment)) {
-            favouriteAliments.add(aliment);
-            added = true;
-        }
-        return added;
     }
 
     public List<Aliment> getAllergies() {
