@@ -18,11 +18,19 @@ public class Worker extends User {
         this.idRestaurant = idRestaurant;
     }
 
-    public String getRestaurant() {
+    public String getIdRestaurant() {
         return idRestaurant;
     }
 
-    public void setRestaurant(String restaurant) {
+    public void setIdRestaurant(String idRestaurant) {
         this.idRestaurant = idRestaurant;
+    }
+
+    @Override
+    public String toString() {
+        return "Worker{" +
+                "user=" + super.toString() +
+                "idRestaurant='" + idRestaurant + '\'' +
+                '}';
     }
 }

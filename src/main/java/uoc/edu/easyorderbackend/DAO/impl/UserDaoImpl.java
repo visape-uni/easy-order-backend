@@ -38,6 +38,7 @@ public class UserDaoImpl implements Dao<User> {
             user = userSnapshot.get().toObject(Client.class);
         } else {
             // isWorker
+            Worker worker = userSnapshot.get().toObject(Worker.class);
             user = userSnapshot.get().toObject(Worker.class);
 
             // TODO: GET RESTAURANT OF WORKER IF NOT NULL

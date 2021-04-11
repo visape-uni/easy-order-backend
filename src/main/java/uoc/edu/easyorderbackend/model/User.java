@@ -57,4 +57,15 @@ public class User {
     public void setIsClient(Boolean client) {
         isClient = client;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "uid='" + uid + '\'' +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", isEmailVerified=" + isEmailVerified +
+                ", isClient=" + isClient +
+                '}';
+    }
 }
