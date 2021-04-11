@@ -51,6 +51,7 @@ public class UserController {
         }
 
         logger.info("UserController: Giving response");
+        logger.info("UserController: " + response.getBody());
         return response;
     }
 
