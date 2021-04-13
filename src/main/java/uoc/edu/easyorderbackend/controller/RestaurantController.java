@@ -23,6 +23,14 @@ public class RestaurantController {
 
     private RestaurantService restaurantService;
 
+    /**
+     *
+     * @param restaurant
+     * @throws EasyOrderBackendException If the owner of the restaurant
+     * doesn't exists
+     * @return A responseEntity with the restaurant created
+     */
+
     @PostMapping(UrlEasyOrderConstants.createUrl)
     public ResponseEntity<Restaurant> createRestaurant(@RequestBody Restaurant restaurant) {
         logger.info("RestaurantController: Create Restaurant");
@@ -30,7 +38,7 @@ public class RestaurantController {
 
         if (restaurant != null && StringUtils.isNotBlank(restaurant.getName())
             && StringUtils.isNotBlank(restaurant.getCity()) && StringUtils.isNotBlank(restaurant.getCountry())
-                && StringUtils.isNotBlank(restaurant.getZipCode())) {
+                && StringUtils.isNotBlank(restaurant.getZipCode()) && restaurant.getOwner() != null) {
 
             Restaurant newRestaurant = restaurantService.createRestaurant(restaurant);
             response = new ResponseEntity<>(newRestaurant, HttpStatus.OK);

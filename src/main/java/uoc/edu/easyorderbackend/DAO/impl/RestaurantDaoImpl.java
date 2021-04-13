@@ -43,32 +43,29 @@ public class RestaurantDaoImpl implements Dao<Restaurant> {
 
     @Override
     public String save(Restaurant restaurant) {
-        try {
-            logger.info("RestaurantDao: Saving restaurant");
-            restaurantsColRef = getCollection();
-            if (StringUtils.isNotBlank(restaurant.getId())) {
-                DocumentReference restaurantDocRef = restaurantsColRef.document(restaurant.getId());
+        logger.info("RestaurantDao: Saving restaurant");
+        restaurantsColRef = getCollection();
 
-                restaurantDocRef.set(restaurant);
+        // Set Owner null to avoid store to DB
+        restaurant.setOwner(null);
 
-                logger.info("RestaurantDao: restaurant saved with ID: " + restaurant.getId());
-                return restaurant.getId();
-            } else {
-                ApiFuture<DocumentReference> restaurantDocRef = restaurantsColRef.add(restaurant);
+        if (StringUtils.isNotBlank(restaurant.getUid())) {
+            DocumentReference restaurantDocRef = restaurantsColRef.document(restaurant.getUid());
 
-                logger.info("RestaurantDao: restaurant saved with ID: " + restaurantDocRef.get().getId());
-                return restaurantDocRef.get().getId();
-            }
-        } catch (ExecutionException e) {
-            throw new EasyOrderBackendException(HttpStatus.INTERNAL_SERVER_ERROR,
-                    "RestaurantDao: ExecutionException -> " + e.getCause().getMessage());
+            restaurantDocRef.set(restaurant);
 
-        } catch (InterruptedException e) {
-            throw new EasyOrderBackendException(HttpStatus.INTERNAL_SERVER_ERROR,
-                    "RestaurantDao: InterruptedException -> Thread interrupted");
+            logger.info("RestaurantDao: restaurant saved with ID: " + restaurant.getUid());
+            return restaurant.getUid();
+        } else {
+            DocumentReference restaurantDocRef = restaurantsColRef.document();
 
+            restaurant.setUid(restaurantDocRef.getId());
+
+            restaurantDocRef.set(restaurant.toMap());
+
+            logger.info("RestaurantDao: restaurant saved with ID: " + restaurant.getUid());
+            return restaurant.getUid();
         }
-
     }
 
     @Override

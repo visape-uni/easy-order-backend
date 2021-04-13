@@ -1,10 +1,20 @@
 package uoc.edu.easyorderbackend.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.cloud.firestore.DocumentReference;
+import uoc.edu.easyorderbackend.model.serializer.RestaurantSerializer;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Restaurant {
-    private String id;
+    private String uid;
     private String name;
     private String street;
     private String city;
@@ -14,6 +24,9 @@ public class Restaurant {
     private List<Table> tables;
     private List<Menu> menus;
     private List<Worker> workers;
+    private Worker owner;
+    @JsonIgnore // Avoid serialize DocumentReference in Response
+    private DocumentReference ownerRef;
 
     public Restaurant() {
         tables = new ArrayList<>();
@@ -21,9 +34,9 @@ public class Restaurant {
         workers = new ArrayList<>();
     }
 
-    public Restaurant(String id, String name, String street, String city, String zipCode, String country) {
+    public Restaurant(String uid, String name, String street, String city, String zipCode, String country) {
         this();
-        this.id = id;
+        this.uid = uid;
         this.name = name;
         this.street = street;
         this.city = city;
@@ -31,8 +44,8 @@ public class Restaurant {
         this.country = country;
     }
 
-    public Restaurant(String id, String name, String street, String city, String zipCode, String country, String imageUrl, List<Table> tables, List<Menu> menus, List<Worker> workers) {
-        this.id = id;
+    public Restaurant(String uid, String name, String street, String city, String zipCode, String country, String imageUrl, List<Table> tables, List<Menu> menus, List<Worker> workers, Worker owner) {
+        this.uid = uid;
         this.name = name;
         this.street = street;
         this.city = city;
@@ -42,14 +55,15 @@ public class Restaurant {
         this.tables = tables;
         this.menus = menus;
         this.workers = workers;
+        this.owner = owner;
     }
 
-    public String getId() {
-        return id;
+    public String getUid() {
+        return uid;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getName() {
@@ -124,10 +138,26 @@ public class Restaurant {
         this.imageUrl = imageUrl;
     }
 
+    public Worker getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Worker owner) {
+        this.owner = owner;
+    }
+
+    public DocumentReference getOwnerRef() {
+        return ownerRef;
+    }
+
+    public void setOwnerRef(DocumentReference ownerRef) {
+        this.ownerRef = ownerRef;
+    }
+
     @Override
     public String toString() {
         return "Restaurant{" +
-                "id='" + id + '\'' +
+                "uid='" + uid + '\'' +
                 ", name='" + name + '\'' +
                 ", street='" + street + '\'' +
                 ", city='" + city + '\'' +
@@ -137,6 +167,30 @@ public class Restaurant {
                 ", tables=" + tables +
                 ", menus=" + menus +
                 ", workers=" + workers +
+                ", owner=" + (owner != null ? owner.toString() : "null") +
                 '}';
     }
+
+    public Map<String, Object> toMap(){
+        Map<String, Object> map = new HashMap<String, Object>();
+
+        if (uid != null) map.put("uid", uid);
+        if (name != null) map.put("name", name);
+        if (street != null) map.put("street", street);
+        if (city != null) map.put("city", city);
+        if (zipCode != null) map.put("zipCode", zipCode);
+        if (country != null) map.put("country", country);
+        if (imageUrl != null) map.put("imageUrl", imageUrl);
+        if (tables != null && !tables.isEmpty()) map.put("tables", tables);
+        if (menus != null && !menus.isEmpty()) map.put("menus", menus);
+        if (workers != null && !workers.isEmpty()) map.put("workers", workers);
+        if (owner != null) map.put("owner", owner);
+        if (ownerRef != null) map.put("ownerRef", ownerRef);
+
+        return map;
+    }
+
+    // TODO: fromMap(Map<String, Object>)
+
+
 }

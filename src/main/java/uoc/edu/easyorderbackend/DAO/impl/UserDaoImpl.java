@@ -26,6 +26,23 @@ public class UserDaoImpl implements Dao<User> {
 
     private CollectionReference usersColRef;
 
+    public DocumentReference getReference(String id) {
+        logger.info("UserDao: getting reference");
+
+        usersColRef = getCollection();
+
+        DocumentReference userRef = usersColRef.document(id);
+        try {
+            if (userRef.get().get().exists()) {
+                return userRef;
+            } else {
+                throw new EasyOrderBackendException(HttpStatus.NOT_FOUND, "Owner not found");
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            throw new EasyOrderBackendException(HttpStatus.NOT_FOUND, "Owner not found");
+        }
+    }
+
     @Override
     public Optional<User> get(String id) throws ExecutionException, InterruptedException {
         logger.info("UserDao: getting user");
@@ -66,29 +83,24 @@ public class UserDaoImpl implements Dao<User> {
 
     @Override
     public String save(User user) {
-        try {
-            logger.info("UserDao: Saving user");
-            usersColRef = getCollection();
-            if (StringUtils.isNotBlank(user.getUid())) {
-                DocumentReference userDocRef = usersColRef.document(user.getUid());
-                //Write
-                userDocRef.set(user);
-                logger.info("UserDao: user saved");
-                return user.getUid();
-            } else {
-                ApiFuture<DocumentReference> userDocRef = usersColRef.add(user);
+        logger.info("UserDao: Saving user");
+        usersColRef = getCollection();
+        if (StringUtils.isNotBlank(user.getUid())) {
+            DocumentReference userDocRef = usersColRef.document(user.getUid());
+            //Write
+            userDocRef.set(user);
+            logger.info("UserDao: user saved");
+            return user.getUid();
+        } else {
 
-                logger.info("UserDao: user saved with ID: " + userDocRef.get().getId());
-                return userDocRef.get().getId();
-            }
-        } catch (ExecutionException e) {
-            throw new EasyOrderBackendException(HttpStatus.INTERNAL_SERVER_ERROR,
-                    "UserDao: ExecutionException -> " + e.getCause().getMessage());
+            DocumentReference userDocRef = usersColRef.document();
 
-        } catch (InterruptedException e) {
-            throw new EasyOrderBackendException(HttpStatus.INTERNAL_SERVER_ERROR,
-                    "UserDao: InterruptedException -> Thread interrupted");
+            user.setUid(userDocRef.getId());
 
+            userDocRef.set(user);
+
+            logger.info("RestaurantDao: restaurant saved with ID: " + user.getUid());
+            return user.getUid();
         }
     }
 

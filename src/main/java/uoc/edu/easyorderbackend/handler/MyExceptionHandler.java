@@ -2,6 +2,7 @@ package uoc.edu.easyorderbackend.handler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -17,6 +18,13 @@ public class MyExceptionHandler {
         return new ResponseEntity<>(new EasyOrderException(exception.getMessage()),
                 exception.getStatus());
     }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<EasyOrderException> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException exception, WebRequest request) {
+        return new ResponseEntity<>(new EasyOrderException(exception.getMessage()),
+                HttpStatus.BAD_REQUEST);
+    }
+
 
     // handle global exceptions
     @ExceptionHandler(Exception.class)
