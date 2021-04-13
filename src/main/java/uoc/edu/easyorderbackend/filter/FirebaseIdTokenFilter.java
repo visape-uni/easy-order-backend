@@ -39,6 +39,7 @@ public class FirebaseIdTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         try {
+
             logger.info("FirebaseIdTokenFilter: Filtering");
 
             String authorization = request.getHeader("Authorization");

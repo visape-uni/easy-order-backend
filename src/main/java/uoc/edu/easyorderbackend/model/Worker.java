@@ -8,29 +8,29 @@ import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Worker extends User {
-    private String idRestaurant;
+    private Restaurant restaurant;
 
     public Worker() {
     }
 
-    public Worker(String uid, String username, String email, Boolean isEmailVerified, String idRestaurant) {
+    public Worker(String uid, String username, String email, Boolean isEmailVerified, Restaurant restaurant) {
         super(uid, username, email, isEmailVerified, false);
-        this.idRestaurant = idRestaurant;
+        this.restaurant = restaurant;
     }
 
-    public String getIdRestaurant() {
-        return idRestaurant;
+    public Restaurant getRestaurant() {
+        return restaurant;
     }
 
-    public void setIdRestaurant(String idRestaurant) {
-        this.idRestaurant = idRestaurant;
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
     }
 
     @Override
     public String toString() {
         return "Worker{" +
                 "user=" + super.toString() +
-                "idRestaurant='" + idRestaurant + '\'' +
+                "restaurant='" +(restaurant != null ? restaurant.toString() : "null") + '\'' +
                 '}';
     }
 }

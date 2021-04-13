@@ -123,4 +123,20 @@ public class Restaurant {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
+    @Override
+    public String toString() {
+        return "Restaurant{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", street='" + street + '\'' +
+                ", city='" + city + '\'' +
+                ", zipCode='" + zipCode + '\'' +
+                ", country='" + country + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", tables=" + tables +
+                ", menus=" + menus +
+                ", workers=" + workers +
+                '}';
+    }
 }

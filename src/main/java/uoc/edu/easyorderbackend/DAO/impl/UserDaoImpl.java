@@ -31,18 +31,30 @@ public class UserDaoImpl implements Dao<User> {
         logger.info("UserDao: getting user");
         usersColRef = getCollection();
         DocumentReference userDocRef = usersColRef.document(id);
-        ApiFuture<DocumentSnapshot> userSnapshot = userDocRef.get();
-        User user;
-        if ((Boolean) userSnapshot.get().get("isClient")) {
-            // isClient
-            user = userSnapshot.get().toObject(Client.class);
-        } else {
-            // isWorker
-            Worker worker = userSnapshot.get().toObject(Worker.class);
-            user = userSnapshot.get().toObject(Worker.class);
 
-            // TODO: GET RESTAURANT OF WORKER IF NOT NULL
+
+
+        ApiFuture<DocumentSnapshot> userSnapshot = userDocRef.get();
+        User user = null;
+        if (userSnapshot.get() != null
+                && userSnapshot.get().get("isClient") != null) {
+            if (userSnapshot.get() != null
+                    && userSnapshot.get().get("isClient") != null
+                    && (Boolean) userSnapshot.get().get("isClient")) {
+                // isClient
+                user = userSnapshot.get().toObject(Client.class);
+            } else {
+                // isWorker
+                user = userSnapshot.get().toObject(Worker.class);
+                DocumentReference restaurantRef = (DocumentReference) userSnapshot.get().get("restaurantRef"); //TODO: PROBAR ESTO
+                if (restaurantRef != null) {
+                    ApiFuture<DocumentSnapshot> restaurantSnapshot = restaurantRef.get();
+                    Restaurant restaurant = restaurantSnapshot.get().toObject(Restaurant.class);
+                    ((Worker) user).setRestaurant(restaurant);
+                }
+            }
         }
+
         logger.info("UserDao: user successfully obtained");
         return Optional.ofNullable(user);
     }
