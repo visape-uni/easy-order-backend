@@ -2,10 +2,7 @@ package uoc.edu.easyorderbackend.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.cloud.firestore.DocumentReference;
-import uoc.edu.easyorderbackend.model.serializer.RestaurantSerializer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
