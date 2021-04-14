@@ -52,7 +52,7 @@ public class Worker extends User {
         return "Worker{" +
                 "user=" + super.toString() +
                 "restaurant='" +(restaurant != null ? restaurant.toString() : "null") + '\'' +
-                "isOwner='" + isOwner.toString() + '\'' +
+                "isOwner='" + isOwner + '\'' +
                 '}';
     }
 
