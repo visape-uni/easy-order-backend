@@ -15,6 +15,7 @@ public class Worker extends User {
     private DocumentReference restaurantRef;
 
     public Worker() {
+        super();
     }
 
     public Worker(String uid, String username, String email, Boolean isEmailVerified, Restaurant restaurant, Boolean isOwner) {
@@ -45,6 +46,14 @@ public class Worker extends User {
 
     public void setRestaurantRef(DocumentReference restaurantRef) {
         this.restaurantRef = restaurantRef;
+    }
+
+    public Boolean getOwner() {
+        return isOwner;
+    }
+
+    public void setOwner(Boolean owner) {
+        isOwner = owner;
     }
 
     @Override

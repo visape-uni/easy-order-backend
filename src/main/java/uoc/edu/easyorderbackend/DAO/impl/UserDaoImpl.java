@@ -64,7 +64,7 @@ public class UserDaoImpl implements Dao<User> {
                 // isWorker
                 user = userSnapshot.get().toObject(Worker.class);
                 DocumentReference restaurantRef = (DocumentReference) userSnapshot.get().get("restaurantRef");
-                if (restaurantRef != null) {
+                if (restaurantRef != null && user != null) {
                     ApiFuture<DocumentSnapshot> restaurantSnapshot = restaurantRef.get();
                     Restaurant restaurant = restaurantSnapshot.get().toObject(Restaurant.class);
                     ((Worker) user).setRestaurant(restaurant);

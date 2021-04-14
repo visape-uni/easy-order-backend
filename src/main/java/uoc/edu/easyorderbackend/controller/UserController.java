@@ -1,6 +1,5 @@
 package uoc.edu.easyorderbackend.controller;
 
-import com.google.firebase.auth.FirebaseAuthException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +50,7 @@ public class UserController {
         }
 
         logger.info("UserController: Giving response");
+        logger.info("UserController: logger");
         logger.info("UserController: " + response.getBody());
         return response;
     }
