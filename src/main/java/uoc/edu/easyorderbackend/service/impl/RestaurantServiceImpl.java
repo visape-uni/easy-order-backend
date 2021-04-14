@@ -10,7 +10,12 @@ import uoc.edu.easyorderbackend.DAO.impl.RestaurantDaoImpl;
 import uoc.edu.easyorderbackend.DAO.impl.UserDaoImpl;
 import uoc.edu.easyorderbackend.exceptions.EasyOrderBackendException;
 import uoc.edu.easyorderbackend.model.Restaurant;
+import uoc.edu.easyorderbackend.model.User;
+import uoc.edu.easyorderbackend.model.Worker;
 import uoc.edu.easyorderbackend.service.RestaurantService;
+
+import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
 @Service
 public class RestaurantServiceImpl implements RestaurantService {
@@ -34,7 +39,31 @@ public class RestaurantServiceImpl implements RestaurantService {
             // Save restaurant in DB
             String id = restaurantDao.save(restaurant);
 
-            //TODO: SAVE RESTAURANT REF TO USER
+            // Save restaurantRef in UserEntity in BD
+            try {
+                Optional<User> userOptional = userDao.get(restaurant.getOwner().getUid());
+                if (userOptional.isPresent()) {
+
+                    restaurant.setOwnerRef(null);
+                    Worker worker = (Worker) userOptional.get();
+                    worker.setIsOwner(true);
+
+                    DocumentReference restaurantRef = restaurantDao.getReference(id);
+                    worker.setRestaurantRef(restaurantRef);
+
+                    // TODO: REVISAR SI HAY QUE HACE UPDATE EN VEZ DE SAVE
+                    userDao.save(worker);
+
+
+                } else {
+                    throw new EasyOrderBackendException(HttpStatus.NOT_FOUND, "Owner not found");
+                }
+            } catch (ExecutionException e) {
+                throw new EasyOrderBackendException(HttpStatus.INTERNAL_SERVER_ERROR, "Backend server error: Process aborted");
+            } catch (InterruptedException e) {
+                throw new EasyOrderBackendException(HttpStatus.INTERNAL_SERVER_ERROR, "Backend server error: Process interrupted");
+            }
+
 
             logger.info("RestaurantService: Restaurant created");
             return restaurant;

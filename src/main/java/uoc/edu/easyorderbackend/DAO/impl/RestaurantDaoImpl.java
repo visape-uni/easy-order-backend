@@ -25,6 +25,23 @@ public class RestaurantDaoImpl implements Dao<Restaurant> {
 
     private CollectionReference restaurantsColRef;
 
+    public DocumentReference getReference(String id) {
+        logger.info("RestaurantDao: getting reference");
+
+        restaurantsColRef = getCollection();
+
+        DocumentReference restaurantRef = restaurantsColRef.document(id);
+        try {
+            if (restaurantRef.get().get().exists()) {
+                return restaurantRef;
+            } else {
+                throw new EasyOrderBackendException(HttpStatus.NOT_FOUND, "Owner not found");
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            throw new EasyOrderBackendException(HttpStatus.NOT_FOUND, "Owner not found");
+        }
+    }
+
     @Override
     public Optional<Restaurant> get(String id) throws ExecutionException, InterruptedException {
         logger.info("RestaurantDao: getting restaurant");

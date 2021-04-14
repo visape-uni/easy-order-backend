@@ -63,7 +63,7 @@ public class UserDaoImpl implements Dao<User> {
             } else {
                 // isWorker
                 user = userSnapshot.get().toObject(Worker.class);
-                DocumentReference restaurantRef = (DocumentReference) userSnapshot.get().get("restaurantRef"); //TODO: PROBAR ESTO
+                DocumentReference restaurantRef = (DocumentReference) userSnapshot.get().get("restaurantRef");
                 if (restaurantRef != null) {
                     ApiFuture<DocumentSnapshot> restaurantSnapshot = restaurantRef.get();
                     Restaurant restaurant = restaurantSnapshot.get().toObject(Restaurant.class);
@@ -106,6 +106,7 @@ public class UserDaoImpl implements Dao<User> {
 
     @Override
     public void update(User user, String[] params) {
+
 
     }
 
