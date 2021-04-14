@@ -1,5 +1,7 @@
 package uoc.edu.easyorderbackend.handler;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -12,15 +14,19 @@ import uoc.edu.easyorderbackend.exceptions.EasyOrderException;
 @ControllerAdvice
 public class MyExceptionHandler {
 
+    private final static Logger logger = LoggerFactory.getLogger(MyExceptionHandler.class);
+
     // handle specific exceptions
     @ExceptionHandler(EasyOrderBackendException.class)
     public ResponseEntity<EasyOrderException> handleEasyOrderException(EasyOrderBackendException exception, WebRequest request) {
+        logger.error("MyExceptionHandler: ", exception);
         return new ResponseEntity<>(new EasyOrderException(exception.getMessage()),
                 exception.getStatus());
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<EasyOrderException> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException exception, WebRequest request) {
+        logger.error("MyExceptionHandler: ", exception);
         return new ResponseEntity<>(new EasyOrderException(exception.getMessage()),
                 HttpStatus.BAD_REQUEST);
     }
@@ -29,7 +35,7 @@ public class MyExceptionHandler {
     // handle global exceptions
     @ExceptionHandler(Exception.class)
     public ResponseEntity<EasyOrderException> handleSecurityException (Exception exception, WebRequest request) {
-
+        logger.error("MyExceptionHandler: ", exception);
         return new ResponseEntity<>(new EasyOrderException(exception.getMessage()),
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
