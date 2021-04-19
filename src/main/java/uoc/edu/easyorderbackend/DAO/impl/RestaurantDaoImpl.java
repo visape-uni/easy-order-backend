@@ -69,7 +69,7 @@ public class RestaurantDaoImpl implements Dao<Restaurant> {
         if (StringUtils.isNotBlank(restaurant.getUid())) {
             DocumentReference restaurantDocRef = restaurantsColRef.document(restaurant.getUid());
 
-            restaurantDocRef.set(restaurant);
+            restaurantDocRef.set(restaurant.toMap());
 
             logger.info("RestaurantDao: restaurant saved with ID: " + restaurant.getUid());
             return restaurant.getUid();

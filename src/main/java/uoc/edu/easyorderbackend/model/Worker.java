@@ -48,14 +48,6 @@ public class Worker extends User {
         this.restaurantRef = restaurantRef;
     }
 
-    public Boolean getOwner() {
-        return isOwner;
-    }
-
-    public void setOwner(Boolean owner) {
-        isOwner = owner;
-    }
-
     @Override
     public String toString() {
         return "Worker{" +
@@ -74,6 +66,8 @@ public class Worker extends User {
         if (getIsClient() != null) map.put("isClient", getIsClient());
         if (getIsEmailVerified() != null) map.put("isEmailVerified", getIsEmailVerified());
         if (getRestaurantRef() != null) map.put("restaurantRef", getRestaurantRef());
+        if (getRestaurant() != null) map.put("restaurant", restaurant);
+        if (getIsOwner() != null) map.put("isOwner", getIsOwner());
 
         return map;
     }

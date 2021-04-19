@@ -36,15 +36,18 @@ public class RestaurantServiceImpl implements RestaurantService {
         if (ownerRefence != null) {
             // Set Owner ref before save in BD
             restaurant.setOwnerRef(ownerRefence);
-            // Save restaurant in DB
+            // Save owner id
+            String ownerUid = restaurant.getOwner().getUid();
+            // Save restaurant in DB (Owner is deleted)
             String id = restaurantDao.save(restaurant);
 
             // Save restaurantRef in UserEntity in BD
             try {
-                Optional<User> userOptional = userDao.get(restaurant.getOwner().getUid());
+                Optional<User> userOptional = userDao.get(ownerUid);
                 if (userOptional.isPresent()) {
 
                     restaurant.setOwnerRef(null);
+                    // Set Owner to true
                     Worker worker = (Worker) userOptional.get();
                     worker.setIsOwner(true);
 

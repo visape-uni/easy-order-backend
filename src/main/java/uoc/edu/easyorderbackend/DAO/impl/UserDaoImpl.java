@@ -50,25 +50,21 @@ public class UserDaoImpl implements Dao<User> {
         DocumentReference userDocRef = usersColRef.document(id);
 
 
-
         ApiFuture<DocumentSnapshot> userSnapshot = userDocRef.get();
         User user = null;
         if (userSnapshot.get() != null
-                && userSnapshot.get().get("isClient") != null) {
-            if (userSnapshot.get() != null
-                    && userSnapshot.get().get("isClient") != null
-                    && (Boolean) userSnapshot.get().get("isClient")) {
-                // isClient
-                user = userSnapshot.get().toObject(Client.class);
-            } else {
-                // isWorker
-                user = userSnapshot.get().toObject(Worker.class);
-                DocumentReference restaurantRef = (DocumentReference) userSnapshot.get().get("restaurantRef");
-                if (restaurantRef != null && user != null) {
-                    ApiFuture<DocumentSnapshot> restaurantSnapshot = restaurantRef.get();
-                    Restaurant restaurant = restaurantSnapshot.get().toObject(Restaurant.class);
-                    ((Worker) user).setRestaurant(restaurant);
-                }
+                && userSnapshot.get().get("isClient") != null
+                && (Boolean) userSnapshot.get().get("isClient")) {
+            // isClient
+            user = userSnapshot.get().toObject(Client.class);
+        } else {
+            // isWorker
+            user = userSnapshot.get().toObject(Worker.class);
+            DocumentReference restaurantRef = (DocumentReference) userSnapshot.get().get("restaurantRef");
+            if (restaurantRef != null && user != null) {
+                ApiFuture<DocumentSnapshot> restaurantSnapshot = restaurantRef.get();
+                Restaurant restaurant = restaurantSnapshot.get().toObject(Restaurant.class);
+                ((Worker) user).setRestaurant(restaurant);
             }
         }
 
@@ -85,10 +81,16 @@ public class UserDaoImpl implements Dao<User> {
     public String save(User user) {
         logger.info("UserDao: Saving user");
         usersColRef = getCollection();
+
+        // Set restaurant to null to avoid store in BD
+        if (user instanceof Worker) {
+            ((Worker) user).setRestaurant(null);
+        }
+
         if (StringUtils.isNotBlank(user.getUid())) {
             DocumentReference userDocRef = usersColRef.document(user.getUid());
             //Write
-            userDocRef.set(user);
+            userDocRef.set(user.toMap());
             logger.info("UserDao: user saved");
             return user.getUid();
         } else {
@@ -97,7 +99,7 @@ public class UserDaoImpl implements Dao<User> {
 
             user.setUid(userDocRef.getId());
 
-            userDocRef.set(user);
+            userDocRef.set(user.toMap());
 
             logger.info("RestaurantDao: restaurant saved with ID: " + user.getUid());
             return user.getUid();

@@ -1,5 +1,8 @@
 package uoc.edu.easyorderbackend.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class User {
     private String uid;
     private String username;
@@ -67,5 +70,17 @@ public class User {
                 ", isEmailVerified=" + isEmailVerified +
                 ", isClient=" + isClient +
                 '}';
+    }
+
+    public Map<String, Object> toMap(){
+        Map<String, Object> map = new HashMap<String, Object>();
+
+        if (getUid() != null) map.put("uid", getUid());
+        if (getUsername() != null) map.put("username", getUsername());
+        if (getEmail() != null) map.put("email", getEmail());
+        if (getIsClient() != null) map.put("isClient", getIsClient());
+        if (getIsEmailVerified() != null) map.put("isEmailVerified", getIsEmailVerified());
+
+        return map;
     }
 }
