@@ -6,10 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import uoc.edu.easyorderbackend.constants.UrlEasyOrderConstants;
 import uoc.edu.easyorderbackend.exceptions.EasyOrderBackendException;
 import uoc.edu.easyorderbackend.model.Restaurant;
@@ -46,6 +43,22 @@ public class RestaurantController {
             throw new EasyOrderBackendException(HttpStatus.BAD_REQUEST, "Any mandatory camp of the Restaurant is empty");
         }
         logger.info("RestaurantController: Giving response");
+        return response;
+    }
+
+    @GetMapping(UrlEasyOrderConstants.getUrl)
+    public ResponseEntity<Restaurant> getRestaurant(@PathVariable String idRestaurant) {
+        logger.info("RestaurantController: GetRestaurantProfile");
+        ResponseEntity<Restaurant> response;
+        if (idRestaurant != null) {
+            Restaurant restaurantProfile = restaurantService.getRestaurant(idRestaurant);
+            response = new ResponseEntity<>(restaurantProfile, HttpStatus.OK);
+        } else {
+            throw new EasyOrderBackendException(HttpStatus.BAD_REQUEST, "RestaurantId is empty");
+        }
+        logger.info("RestaurantController: Giving response");
+        logger.info("RestaurantController: logger");
+        logger.info("RestaurantController: " + response.getBody());
         return response;
     }
 

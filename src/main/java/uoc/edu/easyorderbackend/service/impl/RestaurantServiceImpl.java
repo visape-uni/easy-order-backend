@@ -76,6 +76,22 @@ public class RestaurantServiceImpl implements RestaurantService {
         }
     }
 
+    @Override
+    public Restaurant getRestaurant(String uid) {
+        try {
+            Optional<Restaurant> optionalRestaurant = restaurantDao.get(uid);
+            if (optionalRestaurant.isPresent()) {
+                return optionalRestaurant.get();
+            } else {
+                throw new EasyOrderBackendException(HttpStatus.NOT_FOUND, "Restaurant not found");
+            }
+        }  catch (ExecutionException e) {
+            throw new EasyOrderBackendException(HttpStatus.INTERNAL_SERVER_ERROR, "Backend server error: Process aborted");
+        } catch (InterruptedException e) {
+            throw new EasyOrderBackendException(HttpStatus.INTERNAL_SERVER_ERROR, "Backend server error: Process interrupted");
+        }
+    }
+
     @Autowired
     public void setRestaurantDao(RestaurantDaoImpl restaurantDao) {
         this.restaurantDao = restaurantDao;

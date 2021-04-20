@@ -4,4 +4,5 @@ import uoc.edu.easyorderbackend.model.Restaurant;
 
 public interface RestaurantService {
     Restaurant createRestaurant(Restaurant restaurant);
+    Restaurant getRestaurant(String uid);
 }
