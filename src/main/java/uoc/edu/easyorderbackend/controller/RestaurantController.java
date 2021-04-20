@@ -47,11 +47,11 @@ public class RestaurantController {
     }
 
     @GetMapping(UrlEasyOrderConstants.getUrl)
-    public ResponseEntity<Restaurant> getRestaurant(@PathVariable String idRestaurant) {
+    public ResponseEntity<Restaurant> getRestaurant(@PathVariable String uid) {
         logger.info("RestaurantController: GetRestaurantProfile");
         ResponseEntity<Restaurant> response;
-        if (idRestaurant != null) {
-            Restaurant restaurantProfile = restaurantService.getRestaurant(idRestaurant);
+        if (uid != null) {
+            Restaurant restaurantProfile = restaurantService.getRestaurant(uid);
             response = new ResponseEntity<>(restaurantProfile, HttpStatus.OK);
         } else {
             throw new EasyOrderBackendException(HttpStatus.BAD_REQUEST, "RestaurantId is empty");
