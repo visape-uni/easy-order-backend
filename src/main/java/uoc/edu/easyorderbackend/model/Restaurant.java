@@ -168,8 +168,8 @@ public class Restaurant {
                 '}';
     }
 
-    public Map<String, Object> toMap(){
-        Map<String, Object> map = new HashMap<String, Object>();
+    public Map<String, Object> toMap() {
+        Map<String, Object> map = new HashMap<>();
 
         if (uid != null) map.put("uid", uid);
         if (name != null) map.put("name", name);

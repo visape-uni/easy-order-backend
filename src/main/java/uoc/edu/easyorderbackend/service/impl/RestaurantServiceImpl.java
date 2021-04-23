@@ -7,13 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import uoc.edu.easyorderbackend.DAO.impl.RestaurantDaoImpl;
+import uoc.edu.easyorderbackend.DAO.impl.TableDaoImpl;
 import uoc.edu.easyorderbackend.DAO.impl.UserDaoImpl;
 import uoc.edu.easyorderbackend.exceptions.EasyOrderBackendException;
 import uoc.edu.easyorderbackend.model.Restaurant;
+import uoc.edu.easyorderbackend.model.Table;
 import uoc.edu.easyorderbackend.model.User;
 import uoc.edu.easyorderbackend.model.Worker;
 import uoc.edu.easyorderbackend.service.RestaurantService;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
@@ -25,6 +28,8 @@ public class RestaurantServiceImpl implements RestaurantService {
     private RestaurantDaoImpl restaurantDao;
 
     private UserDaoImpl userDao;
+
+    private TableDaoImpl tableDao;
 
     @Override
     public Restaurant createRestaurant(Restaurant restaurant) {
@@ -81,6 +86,12 @@ public class RestaurantServiceImpl implements RestaurantService {
         try {
             Optional<Restaurant> optionalRestaurant = restaurantDao.get(uid);
             if (optionalRestaurant.isPresent()) {
+                Restaurant restaurant = optionalRestaurant.get();
+
+                //Get tables from restaurant
+                List<Table> tables = tableDao.getAllFromRestaurant(restaurant.getUid());
+                restaurant.setTables(tables);
+
                 return optionalRestaurant.get();
             } else {
                 throw new EasyOrderBackendException(HttpStatus.NOT_FOUND, "Restaurant not found");
@@ -92,6 +103,15 @@ public class RestaurantServiceImpl implements RestaurantService {
         }
     }
 
+    @Override
+    public Table createTable(String restaurantId, Table table) {
+        logger.info("RestaurantService: creating table");
+
+        tableDao.saveToRestaurant(restaurantId, table);
+
+        return table;
+    }
+
     @Autowired
     public void setRestaurantDao(RestaurantDaoImpl restaurantDao) {
         this.restaurantDao = restaurantDao;
@@ -100,6 +120,11 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Autowired
     public void setUserDao(UserDaoImpl userDao) {
         this.userDao = userDao;
+    }
+
+    @Autowired
+    public void setTableDao(TableDaoImpl tableDao) {
+        this.tableDao = tableDao;
     }
 
 }

@@ -65,14 +65,15 @@ public class RestaurantDaoImpl implements Dao<Restaurant> {
 
         // Set Owner null to avoid store to DB
         restaurant.setOwner(null);
+        String newRestaurantUid = null;
 
         if (StringUtils.isNotBlank(restaurant.getUid())) {
             DocumentReference restaurantDocRef = restaurantsColRef.document(restaurant.getUid());
 
             restaurantDocRef.set(restaurant.toMap());
 
-            logger.info("RestaurantDao: restaurant saved with ID: " + restaurant.getUid());
-            return restaurant.getUid();
+            newRestaurantUid = restaurant.getUid();
+            logger.info("RestaurantDao: restaurant saved with ID: " + newRestaurantUid);
         } else {
             DocumentReference restaurantDocRef = restaurantsColRef.document();
 
@@ -80,9 +81,11 @@ public class RestaurantDaoImpl implements Dao<Restaurant> {
 
             restaurantDocRef.set(restaurant.toMap());
 
-            logger.info("RestaurantDao: restaurant saved with ID: " + restaurant.getUid());
-            return restaurant.getUid();
+            newRestaurantUid = restaurant.getUid();
+            logger.info("RestaurantDao: restaurant saved with ID: " + newRestaurantUid);
         }
+
+        return newRestaurantUid;
     }
 
     @Override
