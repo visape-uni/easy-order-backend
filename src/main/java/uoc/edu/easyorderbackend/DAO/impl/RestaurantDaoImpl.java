@@ -46,6 +46,15 @@ public class RestaurantDaoImpl implements Dao<Restaurant> {
         }
     }
 
+    public Optional<Restaurant> get(DocumentReference restaurantRef) throws ExecutionException, InterruptedException {
+        Restaurant restaurant = null;
+        if (restaurantRef != null) {
+            ApiFuture<DocumentSnapshot> restaurantSnapshot = restaurantRef.get();
+            restaurant = restaurantSnapshot.get().toObject(Restaurant.class);
+        }
+        return Optional.ofNullable(restaurant);
+    }
+
     @Override
     public Optional<Restaurant> get(String id) throws ExecutionException, InterruptedException {
         logger.info("RestaurantDao: getting restaurant");
@@ -55,8 +64,10 @@ public class RestaurantDaoImpl implements Dao<Restaurant> {
         Restaurant restaurant = restaurantsSnapshot.get().toObject(Restaurant.class);
 
         //Get tables from restaurant
-        List<Table> tables = tableDao.getAllFromRestaurant(restaurant.getUid());
-        restaurant.setTables(tables);
+        if (restaurant.getUid() != null) {
+            List<Table> tables = tableDao.getAllFromRestaurant(restaurant.getUid());
+            restaurant.setTables(tables);
+        }
 
         logger.info("RestaurantDao: restaurant successfully obtained");
         return Optional.ofNullable(restaurant);

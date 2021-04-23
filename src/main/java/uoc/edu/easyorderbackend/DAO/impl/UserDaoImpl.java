@@ -24,6 +24,8 @@ import java.util.concurrent.ExecutionException;
 public class UserDaoImpl implements Dao<User> {
     private final static Logger logger = LoggerFactory.getLogger(UserDaoImpl.class);
 
+    private RestaurantDaoImpl restaurantDao;
+
     private CollectionReference usersColRef;
 
     public DocumentReference getReference(String id) {
@@ -61,10 +63,9 @@ public class UserDaoImpl implements Dao<User> {
             // isWorker
             user = userSnapshot.get().toObject(Worker.class);
             DocumentReference restaurantRef = (DocumentReference) userSnapshot.get().get("restaurantRef");
-            if (restaurantRef != null && user != null) {
-                ApiFuture<DocumentSnapshot> restaurantSnapshot = restaurantRef.get();
-                Restaurant restaurant = restaurantSnapshot.get().toObject(Restaurant.class);
-                ((Worker) user).setRestaurant(restaurant);
+            Optional<Restaurant> optionalRestaurant = restaurantDao.get(restaurantRef);
+            if (optionalRestaurant.isPresent()) {
+                ((Worker) user).setRestaurant(optionalRestaurant.get());
             }
         }
 
