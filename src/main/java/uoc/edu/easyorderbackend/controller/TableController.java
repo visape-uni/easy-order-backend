@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 import uoc.edu.easyorderbackend.constants.UrlEasyOrderConstants;
 import uoc.edu.easyorderbackend.exceptions.EasyOrderBackendException;
 import uoc.edu.easyorderbackend.model.Table;
-import uoc.edu.easyorderbackend.service.RestaurantService;
+import uoc.edu.easyorderbackend.service.TableService;
 
 @RestController
 @RequestMapping(UrlEasyOrderConstants.tableUrl)
 public class TableController {
     private final static Logger logger = LoggerFactory.getLogger(TableController.class);
 
-    private RestaurantService restaurantService;
+    private TableService tableService;
 
     @PostMapping(UrlEasyOrderConstants.createUrl)
     public ResponseEntity<Table> createTable(@RequestBody Table table) {
@@ -33,7 +33,7 @@ public class TableController {
                 String restaurantId = uidSplit[0];
                 String tableId = uidSplit[1];
                 table.setUid(tableId);
-                Table newTable = restaurantService.createTable(restaurantId, table);
+                Table newTable = tableService.createTable(restaurantId, table);
                 response = new ResponseEntity<>(newTable, HttpStatus.OK);
             } else {
                 throw new EasyOrderBackendException(HttpStatus.BAD_REQUEST, "Invalid ID");
@@ -47,7 +47,7 @@ public class TableController {
     }
 
     @Autowired
-    public void setRestaurantService(RestaurantService restaurantService) {
-        this.restaurantService = restaurantService;
+    public void setTableService(TableService tableService) {
+        this.tableService = tableService;
     }
 }

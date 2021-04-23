@@ -7,6 +7,7 @@ import com.google.cloud.firestore.DocumentSnapshot;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import uoc.edu.easyorderbackend.DAO.Dao;
@@ -14,6 +15,7 @@ import uoc.edu.easyorderbackend.constants.DbEasyOrderConstants;
 import uoc.edu.easyorderbackend.exceptions.EasyOrderBackendException;
 import uoc.edu.easyorderbackend.firebase.FirebaseInitialize;
 import uoc.edu.easyorderbackend.model.Restaurant;
+import uoc.edu.easyorderbackend.model.Table;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +24,8 @@ import java.util.concurrent.ExecutionException;
 @Repository
 public class RestaurantDaoImpl implements Dao<Restaurant> {
     private final static Logger logger = LoggerFactory.getLogger(RestaurantDaoImpl.class);
+
+    private TableDaoImpl tableDao;
 
     private CollectionReference restaurantsColRef;
 
@@ -48,9 +52,14 @@ public class RestaurantDaoImpl implements Dao<Restaurant> {
         restaurantsColRef = getCollection();
         DocumentReference restaurantsDocRef = restaurantsColRef.document(id);
         ApiFuture<DocumentSnapshot> restaurantsSnapshot = restaurantsDocRef.get();
-        Restaurant restaurants = restaurantsSnapshot.get().toObject(Restaurant.class);
+        Restaurant restaurant = restaurantsSnapshot.get().toObject(Restaurant.class);
+
+        //Get tables from restaurant
+        List<Table> tables = tableDao.getAllFromRestaurant(restaurant.getUid());
+        restaurant.setTables(tables);
+
         logger.info("RestaurantDao: restaurant successfully obtained");
-        return Optional.ofNullable(restaurants);
+        return Optional.ofNullable(restaurant);
     }
 
     @Override
@@ -101,5 +110,10 @@ public class RestaurantDaoImpl implements Dao<Restaurant> {
     private CollectionReference getCollection() {
         return FirebaseInitialize.getFirestoreDb()
                 .collection(DbEasyOrderConstants.restaurantsCollection);
+    }
+
+    @Autowired
+    public void setTableDao(TableDaoImpl tableDao) {
+        this.tableDao = tableDao;
     }
 }

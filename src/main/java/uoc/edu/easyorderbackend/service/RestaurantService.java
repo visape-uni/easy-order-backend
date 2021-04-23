@@ -6,5 +6,4 @@ import uoc.edu.easyorderbackend.model.Table;
 public interface RestaurantService {
     Restaurant createRestaurant(Restaurant restaurant);
     Restaurant getRestaurant(String uid);
-    Table createTable(String restaurantId, Table table);
 }
