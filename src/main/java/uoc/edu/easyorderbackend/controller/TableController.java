@@ -6,14 +6,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import uoc.edu.easyorderbackend.constants.UrlEasyOrderConstants;
 import uoc.edu.easyorderbackend.exceptions.EasyOrderBackendException;
 import uoc.edu.easyorderbackend.model.Table;
 import uoc.edu.easyorderbackend.service.TableService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(UrlEasyOrderConstants.tableUrl)
@@ -42,6 +41,20 @@ public class TableController {
             throw new EasyOrderBackendException(HttpStatus.BAD_REQUEST, "Any mandatory camp of the Table is empty");
         }
 
+        logger.info("TableController: Giving response");
+        return response;
+    }
+
+    @GetMapping(UrlEasyOrderConstants.getAllTables)
+    public ResponseEntity<List<Table>> getAllTables(@PathVariable String restaurantId) {
+        logger.info("TableController: get all tables from restaurant");
+        ResponseEntity<List<Table>> response;
+        if (restaurantId != null) {
+            List<Table> tableList = tableService.getTablesFromRestaurant(restaurantId);
+            response = new ResponseEntity<>(tableList, HttpStatus.OK);
+        } else {
+            throw new EasyOrderBackendException(HttpStatus.BAD_REQUEST, "Invalid ID");
+        }
         logger.info("TableController: Giving response");
         return response;
     }
