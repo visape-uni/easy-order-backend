@@ -16,6 +16,7 @@ import uoc.edu.easyorderbackend.firebase.FirebaseInitialize;
 import uoc.edu.easyorderbackend.model.Table;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -43,6 +44,7 @@ public class TableDaoImpl {
         for (QueryDocumentSnapshot document : documents) {
             tables.add(document.toObject(Table.class));
         }
+        tables.sort(Comparator.comparing(Table::getUid));
         logger.info("TableDao: All tables successfully obtained");
 
         return tables;
