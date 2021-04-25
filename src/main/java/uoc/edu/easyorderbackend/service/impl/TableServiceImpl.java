@@ -10,6 +10,7 @@ import uoc.edu.easyorderbackend.exceptions.EasyOrderBackendException;
 import uoc.edu.easyorderbackend.model.Table;
 import uoc.edu.easyorderbackend.service.TableService;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -34,7 +35,9 @@ public class TableServiceImpl implements TableService {
         logger.info("RestaurantService: getting all Tables from restaurant");
 
         try {
-            return tableDao.getAllFromRestaurant(restaurantId);
+            List<Table> tableList = tableDao.getAllFromRestaurant(restaurantId);
+            tableList.sort(Comparator.comparing(Table::getUid));
+            return tableList;
         }  catch (ExecutionException e) {
             throw new EasyOrderBackendException(HttpStatus.INTERNAL_SERVER_ERROR, "Backend server error: Process aborted");
         } catch (InterruptedException e) {
