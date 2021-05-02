@@ -8,4 +8,5 @@ public interface TableService {
     Table createTable(String restaurantId, Table table);
     List<Table> getTablesFromRestaurant(String restaurantId);
     Table changeState(String restaurantId, String tableId, String newState);
+    Table getTable(String restaurantId, String tableId);
 }

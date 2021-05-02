@@ -3,6 +3,7 @@ package uoc.edu.easyorderbackend.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -10,14 +11,16 @@ public class Table {
     private String uid;
     private Integer capacity;
     private String state;
+    private List<Order> orderList;
 
     public Table() {
     }
 
-    public Table(String uid, Integer capacity, String state) {
+    public Table(String uid, Integer capacity, String state, List<Order> orderList) {
         this.uid = uid;
         this.capacity = capacity;
         this.state = state;
+        this.orderList = orderList;
     }
 
     public String getUid() {
@@ -44,12 +47,21 @@ public class Table {
         this.state = state;
     }
 
+    public List<Order> getOrderList() {
+        return orderList;
+    }
+
+    public void setOrderList(List<Order> orderList) {
+        this.orderList = orderList;
+    }
+
     @Override
     public String toString() {
         return "Table{" +
                 "uid='" + uid + '\'' +
                 ", capacity=" + capacity +
                 ", state='" + state + '\'' +
+                ", orderList=" + orderList +
                 '}';
     }
 

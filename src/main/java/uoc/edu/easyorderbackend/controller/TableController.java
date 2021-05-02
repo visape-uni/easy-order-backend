@@ -79,6 +79,21 @@ public class TableController {
         return response;
     }
 
+    @GetMapping(UrlEasyOrderConstants.getTable)
+    public ResponseEntity<Table> getTable(@PathVariable String restaurantId, @PathVariable String tableId) {
+        logger.info("TableController: Get table from restaurant");
+        ResponseEntity<Table> response;
+
+        if (StringUtils.isNotBlank(restaurantId) && StringUtils.isNotBlank(tableId)) {
+            Table table = tableService.getTable(restaurantId, tableId);
+            response = new ResponseEntity<>(table, HttpStatus.OK);
+        } else {
+            throw new EasyOrderBackendException(HttpStatus.BAD_REQUEST, "Invalid ID");
+        }
+        logger.info("TableController: Giving response");
+        return  response;
+    }
+
     private boolean correctState(String newState) {
         return (newState.equals(EasyOrderConstants.emptyTableState) || newState.equals(EasyOrderConstants.occupiedTableState));
     }

@@ -2,14 +2,18 @@ package uoc.edu.easyorderbackend.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Order {
     private String uid;
     private Integer price;
     private String state;
+    private Timestamp started;
     private List<OrderedDish> orderedDishes;
 
     public Order() {
@@ -21,6 +25,7 @@ public class Order {
         this.price = price;
         this.state = state;
         this.orderedDishes = orderedDishes;
+        started = new Timestamp(System.currentTimeMillis());
     }
 
     public String getUid() {
@@ -47,11 +52,31 @@ public class Order {
         this.state = state;
     }
 
+    public Timestamp getStarted() {
+        return started;
+    }
+
+    public void setStarted(Timestamp started) {
+        this.started = started;
+    }
+
     public List<OrderedDish> getOrderedDishes() {
         return orderedDishes;
     }
 
     public void setOrderedDishes(List<OrderedDish> orderedDishes) {
         this.orderedDishes = orderedDishes;
+    }
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> map = new HashMap<>();
+
+        if (uid != null) map.put("uid", uid);
+        if (price != null) map.put("price", price);
+        if (state != null) map.put("state", state);
+        if (started != null) map.put("started", started);
+        if (orderedDishes != null && !orderedDishes.isEmpty()) map.put("orderedDishes", orderedDishes);
+
+        return map;
     }
 }
