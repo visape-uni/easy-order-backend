@@ -1,6 +1,5 @@
 package uoc.edu.easyorderbackend.DAO;
 
-import com.google.cloud.firestore.CollectionReference;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

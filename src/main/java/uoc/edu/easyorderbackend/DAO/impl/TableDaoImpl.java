@@ -1,10 +1,7 @@
 package uoc.edu.easyorderbackend.DAO.impl;
 
 import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.CollectionReference;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.QueryDocumentSnapshot;
-import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.firestore.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,9 +21,19 @@ public class TableDaoImpl {
 
     private CollectionReference tablesColRef;
 
+    private final static String STATE_KEY = "state";
 
-    public Optional<Table> get(String id) throws ExecutionException, InterruptedException {
-        return Optional.empty();
+
+    public Optional<Table> get(String restaurantId, String tableId) throws ExecutionException, InterruptedException {
+        logger.info("TableDao: Getting table");
+        tablesColRef = getCollection(restaurantId);
+        DocumentReference tableDocRef = tablesColRef.document(tableId);
+        ApiFuture<DocumentSnapshot> tableSnapshot = tableDocRef.get();
+        Table table = tableSnapshot.get().toObject(Table.class);
+
+        logger.info("TableDao: Table successfully obtained");
+
+        return Optional.ofNullable(table);
     }
 
     public List<Table> getAllFromRestaurant(String restaurantId) throws ExecutionException, InterruptedException {
@@ -35,9 +42,9 @@ public class TableDaoImpl {
         List<Table> tables = new ArrayList<>();
 
         // Async retrieve all documents
-        ApiFuture<QuerySnapshot> future = tablesColRef.get();
+        ApiFuture<QuerySnapshot> futureQuery = tablesColRef.get();
         // future.get() blocks on response
-        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        List<QueryDocumentSnapshot> documents = futureQuery.get().getDocuments();
         for (QueryDocumentSnapshot document : documents) {
             tables.add(document.toObject(Table.class));
         }
@@ -62,6 +69,23 @@ public class TableDaoImpl {
         }
     }
 
+    public Table changeState(String restaurantId, String tableId, String newState) throws ExecutionException, InterruptedException {
+
+        tablesColRef = getCollection(restaurantId);
+
+        Map<String, Object> updateMap = new HashMap<>();
+        updateMap.put(STATE_KEY, newState);
+
+        ApiFuture<WriteResult> future = tablesColRef.document(tableId).update(updateMap);
+        logger.info("TableDao: State change result: " + future.get());
+
+        Optional<Table> optTable = this.get(restaurantId, tableId);
+        if (optTable.isPresent()) {
+            return optTable.get();
+        } else {
+            throw new EasyOrderBackendException(HttpStatus.NOT_FOUND, "Table does not exist");
+        }
+    }
 
 
     public void update(Table table, String[] params) {
@@ -79,4 +103,6 @@ public class TableDaoImpl {
                 .document(restaurantId)
                 .collection(DbEasyOrderConstants.tablesCollection);
     }
+
+
 }

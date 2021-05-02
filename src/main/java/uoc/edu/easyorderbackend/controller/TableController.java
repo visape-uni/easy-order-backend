@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import uoc.edu.easyorderbackend.constants.EasyOrderConstants;
 import uoc.edu.easyorderbackend.constants.UrlEasyOrderConstants;
 import uoc.edu.easyorderbackend.exceptions.EasyOrderBackendException;
 import uoc.edu.easyorderbackend.model.Table;
@@ -49,7 +50,7 @@ public class TableController {
     public ResponseEntity<List<Table>> getAllTables(@PathVariable String restaurantId) {
         logger.info("TableController: get all tables from restaurant");
         ResponseEntity<List<Table>> response;
-        if (restaurantId != null) {
+        if (StringUtils.isNotBlank(restaurantId)) {
             List<Table> tableList = tableService.getTablesFromRestaurant(restaurantId);
             response = new ResponseEntity<>(tableList, HttpStatus.OK);
         } else {
@@ -57,6 +58,29 @@ public class TableController {
         }
         logger.info("TableController: Giving response");
         return response;
+    }
+
+    @PutMapping(UrlEasyOrderConstants.changeTableState)
+    public ResponseEntity<Table> changeTableState (@PathVariable String restaurantId, @PathVariable String tableId, @RequestBody String newState) {
+        logger.info("TableController: Change table state from restaurant");
+        ResponseEntity<Table> response;
+
+        if (StringUtils.isNotBlank(newState) && correctState(newState)) {
+            if (StringUtils.isNotBlank(restaurantId) && StringUtils.isNotBlank(tableId)) {
+                Table table = tableService.changeState(restaurantId, tableId, newState);
+                response = new ResponseEntity<>(table, HttpStatus.OK);
+            } else {
+                throw new EasyOrderBackendException(HttpStatus.BAD_REQUEST, "Invalid ID");
+            }
+        } else {
+            throw new EasyOrderBackendException(HttpStatus.BAD_REQUEST, "Invalid State");
+        }
+        logger.info("TableController: Giving response");
+        return response;
+    }
+
+    private boolean correctState(String newState) {
+        return (newState.equals(EasyOrderConstants.emptyTableState) || newState.equals(EasyOrderConstants.occupiedTableState));
     }
 
     @Autowired

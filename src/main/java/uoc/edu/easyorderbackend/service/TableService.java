@@ -7,4 +7,5 @@ import java.util.List;
 public interface TableService {
     Table createTable(String restaurantId, Table table);
     List<Table> getTablesFromRestaurant(String restaurantId);
+    Table changeState(String restaurantId, String tableId, String newState);
 }

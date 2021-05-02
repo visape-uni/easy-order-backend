@@ -34,9 +34,20 @@ public class TableServiceImpl implements TableService {
         logger.info("RestaurantService: getting all Tables from restaurant");
 
         try {
-
             return tableDao.getAllFromRestaurant(restaurantId);
         }  catch (ExecutionException e) {
+            throw new EasyOrderBackendException(HttpStatus.INTERNAL_SERVER_ERROR, "Backend server error: Process aborted");
+        } catch (InterruptedException e) {
+            throw new EasyOrderBackendException(HttpStatus.INTERNAL_SERVER_ERROR, "Backend server error: Process interrupted");
+        }
+    }
+
+    @Override
+    public Table changeState(String restaurantId, String tableId, String newState) {
+        logger.info("RestaurantService: Changing table state");
+        try {
+            return tableDao.changeState(restaurantId, tableId, newState);
+        } catch (ExecutionException e) {
             throw new EasyOrderBackendException(HttpStatus.INTERNAL_SERVER_ERROR, "Backend server error: Process aborted");
         } catch (InterruptedException e) {
             throw new EasyOrderBackendException(HttpStatus.INTERNAL_SERVER_ERROR, "Backend server error: Process interrupted");

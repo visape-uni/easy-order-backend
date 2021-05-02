@@ -64,7 +64,7 @@ public class UserDaoImpl implements Dao<User> {
             // isWorker
             user = userSnapshot.get().toObject(Worker.class);
             DocumentReference restaurantRef = (DocumentReference) userSnapshot.get().get("restaurantRef");
-            Optional<Restaurant> optionalRestaurant = restaurantDao.get(restaurantRef);
+            Optional<Restaurant> optionalRestaurant = restaurantDao.getFromRef(restaurantRef);
             if (optionalRestaurant.isPresent()) {
                 ((Worker) user).setRestaurant(optionalRestaurant.get());
             }

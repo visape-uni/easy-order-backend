@@ -46,7 +46,7 @@ public class RestaurantDaoImpl implements Dao<Restaurant> {
         }
     }
 
-    public Optional<Restaurant> get(DocumentReference restaurantRef) throws ExecutionException, InterruptedException {
+    public Optional<Restaurant> getFromRef(DocumentReference restaurantRef) throws ExecutionException, InterruptedException {
         logger.info("RestaurantDao: getting restaurant from Reference");
         Restaurant restaurant = null;
         if (restaurantRef != null) {
