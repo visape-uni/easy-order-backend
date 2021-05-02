@@ -16,7 +16,7 @@ public final class UrlEasyOrderConstants {
 
     public static final String changeTableState = "/changeState/{restaurantId}/{tableId}";
 
-    public static final String getTable = "/{restaurantId}/{tableId}";
+    public static final String getTable = "/get/{restaurantId}/{tableId}";
 
     public static final String createUrl = "/create";
     public static final String getUrl = "/get/{uid}";
