@@ -59,7 +59,7 @@ public class TableServiceImpl implements TableService {
             Order order = new Order(uid, 0, EasyOrderConstants.notPaidOrderState, new ArrayList<>());
             orderDao.saveToTable(restaurantId, tableId, order);
 
-            List<Order> orderList = table.getOrderList();
+            List<Order> orderList = table.getOrderList() != null ? table.getOrderList() : new ArrayList<>();
             orderList.add(order);
             table.setOrderList(orderList);
 
