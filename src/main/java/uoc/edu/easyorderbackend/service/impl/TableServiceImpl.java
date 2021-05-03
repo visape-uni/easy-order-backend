@@ -55,13 +55,15 @@ public class TableServiceImpl implements TableService {
         try {
             Table table =  tableDao.changeState(restaurantId, tableId, newState);
 
-            String uid = new Timestamp(System.currentTimeMillis()).toString();
-            Order order = new Order(uid, 0, EasyOrderConstants.notPaidOrderState, new ArrayList<>());
-            orderDao.saveToTable(restaurantId, tableId, order);
+            if (newState.equals(EasyOrderConstants.occupiedTableState)) {
+                String uid = new Timestamp(System.currentTimeMillis()).toString();
+                Order order = new Order(uid, 0, EasyOrderConstants.notPaidOrderState, new ArrayList<>());
+                orderDao.saveToTable(restaurantId, tableId, order);
 
-            List<Order> orderList = table.getOrderList() != null ? table.getOrderList() : new ArrayList<>();
-            orderList.add(order);
-            table.setOrderList(orderList);
+                List<Order> orderList = table.getOrderList() != null ? table.getOrderList() : new ArrayList<>();
+                orderList.add(order);
+                table.setOrderList(orderList);
+            }
 
             return table;
         } catch (ExecutionException e) {

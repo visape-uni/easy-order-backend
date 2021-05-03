@@ -65,7 +65,7 @@ public class TableController {
         logger.info("TableController: Change table state from restaurant");
         ResponseEntity<Table> response;
 
-        if (StringUtils.isNotBlank(newState) && !correctState(newState)) {
+        if (StringUtils.isNotBlank(newState) && correctState(newState)) {
             if (StringUtils.isNotBlank(restaurantId) && StringUtils.isNotBlank(tableId)) {
                 Table table = tableService.changeState(restaurantId, tableId, newState);
                 response = new ResponseEntity<>(table, HttpStatus.OK);
