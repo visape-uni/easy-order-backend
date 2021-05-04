@@ -1,10 +1,7 @@
 package uoc.edu.easyorderbackend.DAO.impl;
 
 import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.CollectionReference;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.QueryDocumentSnapshot;
-import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.firestore.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +27,24 @@ public class OrderDaoImpl {
 
     public Optional<Order> get(String id) throws ExecutionException, InterruptedException {
         return Optional.empty();
+    }
+
+    public Order getLastOrderFromTable(String restaurantId, String tableId) throws ExecutionException, InterruptedException {
+        logger.info("OrderDao: Getting last order");
+        orderColRef = getCollection(restaurantId, tableId);
+
+        Order order = new Order();
+
+        ApiFuture<QuerySnapshot> futureQuery = orderColRef.limit(1).get();
+
+        List<QueryDocumentSnapshot> documents = futureQuery.get().getDocuments();
+        if (!documents.isEmpty()) {
+            order = documents.get(0).toObject(Order.class);
+            order.setOrderedDishes(orderedDishDao.getAllFromOrder(restaurantId, tableId, order.getUid()));
+        }
+        logger.info("OrderDao: Order successfully obatained");
+
+        return order;
     }
 
     public List<Order> getAllFromTable(String restaurantId, String tableId) throws ExecutionException, InterruptedException {
@@ -88,4 +103,5 @@ public class OrderDaoImpl {
     private void setOrderedDishDao(OrderedDishDaoImpl orderedDishDao) {
         this.orderedDishDao = orderedDishDao;
     }
+
 }

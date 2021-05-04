@@ -33,6 +33,18 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    @Override
+    public Order getLastOrderFromTable(String restaurantId, String tableId) {
+        logger.info("OrderService: getting last Order from table");
+        try {
+            return orderDao.getLastOrderFromTable(restaurantId, tableId);
+        }catch (ExecutionException e) {
+            throw new EasyOrderBackendException(HttpStatus.INTERNAL_SERVER_ERROR, "Backend server error: Process aborted");
+        } catch (InterruptedException e) {
+            throw new EasyOrderBackendException(HttpStatus.INTERNAL_SERVER_ERROR, "Backend server error: Process interrupted");
+        }
+    }
+
     @Autowired
     public void setOrderDao(OrderDaoImpl orderDao) {
         this.orderDao = orderDao;

@@ -41,6 +41,24 @@ public class OrderController {
         return response;
     }
 
+    @GetMapping(UrlEasyOrderConstants.getLastOrder)
+    public ResponseEntity<Order> getLastOrder(@PathVariable String restaurantId, @PathVariable String tableId) {
+        logger.info("OrderController: Get last order from table");
+        ResponseEntity<Order> response;
+
+        if (StringUtils.isNotBlank(restaurantId)
+                && StringUtils.isNotBlank(tableId)) {
+            Order order = orderService.getLastOrderFromTable(restaurantId, tableId);
+            response = new ResponseEntity<>(order, HttpStatus.OK);
+        } else {
+            throw new EasyOrderBackendException(HttpStatus.BAD_REQUEST, "Invalid ID");
+        }
+
+        logger.info("OrderController: Giving response");
+        return response;
+
+    }
+
     @Autowired
     public void setOrderService(OrderService orderService) {
         this.orderService = orderService;

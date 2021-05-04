@@ -11,6 +11,7 @@ public final class UrlEasyOrderConstants {
     public static final String tableUrl = apiUrl + "/table";
     public static final String orderUrl = apiUrl + "/order";
 
+    public static final String getLastOrder = "/getLast/{restaurantId}/{tableId}";
     public static final String getAllOrders = "/getAll/{restaurantId}/{tableId}";
     public static final String getAllTables = "/getAll/{restaurantId}";
 
