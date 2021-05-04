@@ -61,14 +61,16 @@ public class TableController {
     }
 
     @PutMapping(UrlEasyOrderConstants.changeTableState)
-    public ResponseEntity<Table> changeTableState (@PathVariable String restaurantId, @PathVariable String tableId, @RequestBody String newState) {
+    public ResponseEntity<Table> changeTableState (@PathVariable String restaurantId, @PathVariable String tableId, @RequestBody Table table) {
         logger.info("TableController: Change table state from restaurant");
         ResponseEntity<Table> response;
 
+        String newState = table.getState();
+
         if (StringUtils.isNotBlank(newState) && correctState(newState)) {
             if (StringUtils.isNotBlank(restaurantId) && StringUtils.isNotBlank(tableId)) {
-                Table table = tableService.changeState(restaurantId, tableId, newState);
-                response = new ResponseEntity<>(table, HttpStatus.OK);
+                Table newTable = tableService.changeState(restaurantId, tableId, newState);
+                response = new ResponseEntity<>(newTable, HttpStatus.OK);
             } else {
                 throw new EasyOrderBackendException(HttpStatus.BAD_REQUEST, "Invalid ID");
             }
