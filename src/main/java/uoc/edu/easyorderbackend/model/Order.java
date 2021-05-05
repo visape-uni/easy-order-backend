@@ -9,7 +9,7 @@ public class Order {
     private String uid;
     private Integer price;
     private String state;
-    private Date startedTime;
+    private Long startedTime;
     private List<OrderedDish> orderedDishes;
 
     public Order() {
@@ -21,7 +21,7 @@ public class Order {
         this.price = price;
         this.state = state;
         this.orderedDishes = orderedDishes;
-        startedTime = Calendar.getInstance().getTime();
+        startedTime = Calendar.getInstance().getTime().getTime();
     }
 
     public String getUid() {
@@ -48,11 +48,11 @@ public class Order {
         this.state = state;
     }
 
-    public Date getStartedTime() {
+    public Long getStartedTime() {
         return startedTime;
     }
 
-    public void setStartedTime(Date startedTime) {
+    public void setStartedTime(Long startedTime) {
         this.startedTime = startedTime;
     }
 
