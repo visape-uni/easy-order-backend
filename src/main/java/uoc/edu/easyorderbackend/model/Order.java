@@ -21,7 +21,7 @@ public class Order {
         this.price = price;
         this.state = state;
         this.orderedDishes = orderedDishes;
-        startedTime = Calendar.getInstance().getTime().getTime();
+        startedTime = Calendar.getInstance().getTimeInMillis();
     }
 
     public String getUid() {
