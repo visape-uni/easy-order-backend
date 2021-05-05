@@ -31,10 +31,16 @@ public class MyExceptionHandler {
                 HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<EasyOrderException> handleNullPointerExceotion(NullPointerException exception, WebRequest request) {
+        logger.error("MyExceptionHandler: ", exception);
+        return new ResponseEntity<>(new EasyOrderException("Null pointer"),
+                HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
     // handle global exceptions
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<EasyOrderException> handleSecurityException (Exception exception, WebRequest request) {
+    public ResponseEntity<EasyOrderException> handleGenericException (Exception exception, WebRequest request) {
         logger.error("MyExceptionHandler: ", exception);
         return new ResponseEntity<>(new EasyOrderException(exception.getMessage()),
                 HttpStatus.INTERNAL_SERVER_ERROR);
