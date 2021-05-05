@@ -13,8 +13,8 @@ import uoc.edu.easyorderbackend.model.Order;
 import uoc.edu.easyorderbackend.model.Table;
 import uoc.edu.easyorderbackend.service.TableService;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -56,7 +56,7 @@ public class TableServiceImpl implements TableService {
             Table table =  tableDao.changeState(restaurantId, tableId, newState);
 
             if (newState.equals(EasyOrderConstants.occupiedTableState)) {
-                String uid = new Timestamp(System.currentTimeMillis()).toString();
+                String uid = String.valueOf(Calendar.getInstance().getTime().getTime());
                 Order order = new Order(uid, 0, EasyOrderConstants.notPaidOrderState, new ArrayList<>());
                 orderDao.saveToTable(restaurantId, tableId, order);
 
