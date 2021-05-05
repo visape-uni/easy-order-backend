@@ -2,18 +2,14 @@ package uoc.edu.easyorderbackend.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Order {
     private String uid;
     private Integer price;
     private String state;
-    private Timestamp started;
+    private Date startedTime;
     private List<OrderedDish> orderedDishes;
 
     public Order() {
@@ -25,7 +21,7 @@ public class Order {
         this.price = price;
         this.state = state;
         this.orderedDishes = orderedDishes;
-        started = new Timestamp(System.currentTimeMillis());
+        startedTime = Calendar.getInstance().getTime();
     }
 
     public String getUid() {
@@ -52,12 +48,12 @@ public class Order {
         this.state = state;
     }
 
-    public Timestamp getStarted() {
-        return started;
+    public Date getStartedTime() {
+        return startedTime;
     }
 
-    public void setStarted(Timestamp started) {
-        this.started = started;
+    public void setStartedTime(Date startedTime) {
+        this.startedTime = startedTime;
     }
 
     public List<OrderedDish> getOrderedDishes() {
@@ -74,7 +70,7 @@ public class Order {
         if (uid != null) map.put("uid", uid);
         if (price != null) map.put("price", price);
         if (state != null) map.put("state", state);
-        if (started != null) map.put("started", started);
+        if (startedTime != null) map.put("startedTime", startedTime);
         if (orderedDishes != null && !orderedDishes.isEmpty()) map.put("orderedDishes", orderedDishes);
 
         return map;
