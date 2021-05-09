@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import uoc.edu.easyorderbackend.constants.UrlEasyOrderConstants;
 import uoc.edu.easyorderbackend.exceptions.EasyOrderBackendException;
 import uoc.edu.easyorderbackend.model.Category;
+import uoc.edu.easyorderbackend.model.Dish;
 import uoc.edu.easyorderbackend.model.Menu;
 import uoc.edu.easyorderbackend.service.MenuService;
 
@@ -42,6 +43,21 @@ public class MenuController {
         if (StringUtils.isNotBlank(restaurantId)) {
             Category newCategory = menuService.createCategory(restaurantId, category);
             response = new ResponseEntity<>(newCategory, HttpStatus.OK);
+        } else {
+            throw new EasyOrderBackendException(HttpStatus.BAD_REQUEST, "Invalid ID");
+        }
+
+        logger.info("MenuController: Giving response");
+        return response;
+    }
+
+    @PostMapping(UrlEasyOrderConstants.createDish)
+    public ResponseEntity<Dish> createDish(@PathVariable String restaurantId, @PathVariable String categoryId, @RequestBody Dish dish) {
+        logger.info("MenuController: create dish");
+        ResponseEntity<Dish> response;
+        if (StringUtils.isNotBlank(restaurantId) && StringUtils.isNotBlank(categoryId)) {
+            Dish newDish = menuService.createDish(restaurantId, categoryId, dish);
+            response = new ResponseEntity<>(newDish, HttpStatus.OK);
         } else {
             throw new EasyOrderBackendException(HttpStatus.BAD_REQUEST, "Invalid ID");
         }

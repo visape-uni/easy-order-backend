@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import uoc.edu.easyorderbackend.DAO.impl.CategoryDaoImp;
+import uoc.edu.easyorderbackend.DAO.impl.DishDaoImpl;
 import uoc.edu.easyorderbackend.DAO.impl.MenuDaoImpl;
 import uoc.edu.easyorderbackend.exceptions.EasyOrderBackendException;
 import uoc.edu.easyorderbackend.model.Category;
+import uoc.edu.easyorderbackend.model.Dish;
 import uoc.edu.easyorderbackend.model.Menu;
 import uoc.edu.easyorderbackend.service.MenuService;
 
@@ -22,6 +24,7 @@ public class MenuServiceImpl implements MenuService {
 
     private MenuDaoImpl menuDao;
     private CategoryDaoImp categoryDao;
+    private DishDaoImpl dishDao;
 
     @Override
     public Menu getMenuFromRestaurant(String restaurantId) {
@@ -37,7 +40,7 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public Category createCategory(String restaurantId, Category category) {
-        logger.info("MenuServide: Creating category");
+        logger.info("MenuService: Creating category");
         try {
             Menu menu =  menuDao.getMenuFromRestaurant(restaurantId);
 
@@ -57,6 +60,28 @@ public class MenuServiceImpl implements MenuService {
         return category;
     }
 
+    @Override
+    public Dish createDish(String restaurantId, String categoryId, Dish dish) {
+        logger.info("MenuService: Creating dish");
+        try {
+            Menu menu =  menuDao.getMenuFromRestaurant(restaurantId);
+
+            if (StringUtils.isBlank(menu.getUid())) {
+                menu = menuDao.createMenu(restaurantId, menu);
+            }
+
+            String dishId = dishDao.createDish(restaurantId, menu.getUid(), categoryId, dish);
+
+            dish.setUid(dishId);
+        }catch (ExecutionException e) {
+            throw new EasyOrderBackendException(HttpStatus.INTERNAL_SERVER_ERROR, "Backend server error: Process aborted");
+        } catch (InterruptedException e) {
+            throw new EasyOrderBackendException(HttpStatus.INTERNAL_SERVER_ERROR, "Backend server error: Process interrupted");
+        }
+
+        return dish;
+    }
+
     @Autowired
     private void setCategoryDao(CategoryDaoImp categoryDao) {
         this.categoryDao = categoryDao;
@@ -65,5 +90,10 @@ public class MenuServiceImpl implements MenuService {
     @Autowired
     private void setMenuDao(MenuDaoImpl menuDao) {
         this.menuDao = menuDao;
+    }
+
+    @Autowired
+    private void setDishDao(DishDaoImpl dishDao) {
+        this.dishDao = dishDao;
     }
 }

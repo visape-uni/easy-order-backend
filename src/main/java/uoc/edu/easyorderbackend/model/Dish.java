@@ -1,5 +1,8 @@
 package uoc.edu.easyorderbackend.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Dish {
     private String uid;
     private String name;
@@ -63,5 +66,17 @@ public class Dish {
 
     public void setCalories(int calories) {
         this.calories = calories;
+    }
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> map = new HashMap<>();
+
+        if (uid != null) map.put("uid", uid);
+        if (name != null) map.put("name", name);
+        if (description != null) map.put("description", description);
+        map.put("price", price);
+        map.put("calories", calories);
+
+        return map;
     }
 }
