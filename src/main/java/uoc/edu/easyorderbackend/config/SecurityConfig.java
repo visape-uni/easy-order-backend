@@ -40,8 +40,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(new FirebaseIdTokenFilter(authenticationEntryPoint(), authenticationProvider), BasicAuthenticationFilter.class)
                 .csrf().disable()
                 .authorizeRequests()
-                //.antMatchers(UrlEasyOrderConstants.apiUrl+"/**") // ** Makes that all the urls that start with API must be authenticated
-                //.authenticated()
+                .antMatchers(UrlEasyOrderConstants.apiUrl+"/**") // ** Makes that all the urls that start with API must be authenticated
+                .authenticated()
                 .antMatchers(UrlEasyOrderConstants.userUrl+UrlEasyOrderConstants.getUrl)
                 .authenticated()
                 .antMatchers(UrlEasyOrderConstants.userUrl+UrlEasyOrderConstants.createUrl).permitAll()
