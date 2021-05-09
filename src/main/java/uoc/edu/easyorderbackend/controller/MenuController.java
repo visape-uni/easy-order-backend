@@ -67,7 +67,7 @@ public class MenuController {
     }
 
     @DeleteMapping(UrlEasyOrderConstants.deleteDish)
-    public ResponseEntity<Boolean> deleteDish(@PathVariable String restaurantId, @PathVariable String categoryId, @RequestBody String dishId) {
+    public ResponseEntity<Boolean> deleteDish(@PathVariable String restaurantId, @PathVariable String categoryId, @PathVariable String dishId) {
         logger.info("MenuController: delete dish");
         ResponseEntity<Boolean> response;
         if (StringUtils.isNotBlank(restaurantId) && StringUtils.isNotBlank(categoryId) && StringUtils.isNotBlank(dishId)) {
