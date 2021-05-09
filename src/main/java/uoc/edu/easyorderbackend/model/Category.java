@@ -11,6 +11,9 @@ public class Category {
     private String description;
     private List<Dish> dishes;
 
+    public Category() {
+    }
+
     public Category(String uid, String name, String description, ArrayList<Dish> dishes) {
         this.uid = uid;
         this.name = name;
