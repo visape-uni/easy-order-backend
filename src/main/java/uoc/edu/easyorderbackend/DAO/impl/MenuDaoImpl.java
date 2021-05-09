@@ -25,7 +25,7 @@ public class MenuDaoImpl {
     public Menu getMenuFromRestaurant(String restaurantId) throws ExecutionException, InterruptedException {
         logger.info("MenuDao: Getting menu from restaurant");
         menuColRef = getCollection(restaurantId);
-        Menu menu = null;
+        Menu menu = new Menu();
 
         ApiFuture<QuerySnapshot> futureQuery = menuColRef.get();
         List<QueryDocumentSnapshot> documents = futureQuery.get().getDocuments();
