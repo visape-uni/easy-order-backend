@@ -2,6 +2,7 @@ package uoc.edu.easyorderbackend.DAO.impl;
 
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import org.slf4j.Logger;
@@ -35,6 +36,19 @@ public class MenuDaoImpl {
         }
 
         logger.info("MenuDao: Menu successfully obtained");
+        return menu;
+    }
+
+    public Menu createMenu(String restaurantId, Menu menu) {
+        logger.info("MenuDao: Saving Menu");
+        menuColRef = getCollection(restaurantId);
+
+        DocumentReference menuDocRef = menuColRef.document();
+
+        menu.setUid(menuDocRef.getId());
+
+        menuDocRef.set(menu.toMap());
+        logger.info("MenuDao: Menu saved");
         return menu;
     }
 

@@ -1,7 +1,9 @@
 package uoc.edu.easyorderbackend.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Category {
     private String uid;
@@ -46,5 +48,16 @@ public class Category {
 
     public void setDishes(List<Dish> dishes) {
         this.dishes = dishes;
+    }
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> map = new HashMap<>();
+
+        if (uid != null) map.put("uid", uid);
+        if (name != null) map.put("name", name);
+        if (description != null) map.put("description", description);
+        if (dishes != null && !dishes.isEmpty()) map.put("dishes", dishes);
+
+        return map;
     }
 }
