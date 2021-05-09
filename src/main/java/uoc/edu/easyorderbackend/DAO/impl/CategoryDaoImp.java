@@ -48,14 +48,13 @@ public class CategoryDaoImp {
         logger.info("CategoryDAO: Saving category");
         categoryColRef = getCollection(restaurantId, menuId);
 
-        if (StringUtils.isNotBlank(restaurantId) && StringUtils.isNotBlank(menuId)) {
-            DocumentReference categoryDocRef = categoryColRef.document();
-            category.setUid(categoryDocRef.getId());
+        if (StringUtils.isNotBlank(restaurantId) && StringUtils.isNotBlank(menuId) && StringUtils.isNotBlank(category.getUid())) {
+            DocumentReference categoryDocRef = categoryColRef.document(category.getUid());
             categoryDocRef.set(category.toMap());
             logger.info("CategoryDAO: category from restaurant "+ restaurantId +" saved with ID: "+ category.getUid());
             return category.getUid();
         } else {
-            throw new EasyOrderBackendException(HttpStatus.BAD_REQUEST, "RestaurantId or MenuId is null");
+            throw new EasyOrderBackendException(HttpStatus.BAD_REQUEST, "RestaurantId or MenuId or CategoryId is null");
         }
     }
 

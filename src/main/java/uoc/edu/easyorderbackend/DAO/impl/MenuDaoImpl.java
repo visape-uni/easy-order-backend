@@ -11,11 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import uoc.edu.easyorderbackend.constants.DbEasyOrderConstants;
 import uoc.edu.easyorderbackend.firebase.FirebaseInitialize;
-import uoc.edu.easyorderbackend.model.Category;
-import uoc.edu.easyorderbackend.model.Dish;
 import uoc.edu.easyorderbackend.model.Menu;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -37,7 +34,7 @@ public class MenuDaoImpl {
 
             menu = documents.get(0).toObject(Menu.class);
 
-            List<QueryDocumentSnapshot> categoriesDoc = documents.get(0).getReference().collection(DbEasyOrderConstants.categoriesCollection)
+            /*List<QueryDocumentSnapshot> categoriesDoc = documents.get(0).getReference().collection(DbEasyOrderConstants.categoriesCollection)
                     .get().get().getDocuments();
             List<Category> categories = new ArrayList<>();
 
@@ -57,8 +54,8 @@ public class MenuDaoImpl {
                 category.setDishes(dishes);
                 categories.add(category);
             }
-            menu.setCategories(categories);
-            //menu.setCategories(categoryDao.getAllCategoriesFromMenu(restaurantId, menu.getUid()));
+            menu.setCategories(categories);*/
+            menu.setCategories(categoryDao.getAllCategoriesFromMenu(restaurantId, menu.getUid()));
         }
 
         logger.info("MenuDao: Menu successfully obtained");
