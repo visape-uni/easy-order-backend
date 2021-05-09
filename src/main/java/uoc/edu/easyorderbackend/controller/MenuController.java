@@ -66,7 +66,7 @@ public class MenuController {
         return response;
     }
 
-    @DeleteMapping
+    @DeleteMapping(UrlEasyOrderConstants.deleteDish)
     public ResponseEntity<Boolean> deleteDish(@PathVariable String restaurantId, @PathVariable String categoryId, @RequestBody String dishId) {
         logger.info("MenuController: delete dish");
         ResponseEntity<Boolean> response;
