@@ -1,33 +1,26 @@
 package uoc.edu.easyorderbackend.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Dish {
     private String uid;
     private String name;
     private String description;
-    private List<Aliment> aliments;
-    private float price;
+    private double price;
     private int calories;
 
     public Dish() {
-        aliments = new ArrayList<>();
     }
 
-    public Dish(String uid, String name, String description, List<Aliment> aliments, float price) {
+    public Dish(String uid, String name, String description, double price) {
         this.uid = uid;
         this.name = name;
         this.description = description;
-        this.aliments = aliments;
         this.price = price;
     }
 
-    public Dish(String uid, String name, String description, List<Aliment> aliments, float price, int calories) {
+    public Dish(String uid, String name, String description, double price, int calories) {
         this.uid = uid;
         this.name = name;
         this.description = description;
-        this.aliments = aliments;
         this.price = price;
         this.calories = calories;
     }
@@ -56,19 +49,11 @@ public class Dish {
         this.description = description;
     }
 
-    public List<Aliment> getAliments() {
-        return aliments;
-    }
-
-    public void setAliments(List<Aliment> aliments) {
-        this.aliments = aliments;
-    }
-
-    public float getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
