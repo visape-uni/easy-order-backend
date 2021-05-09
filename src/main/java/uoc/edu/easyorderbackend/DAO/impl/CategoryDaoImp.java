@@ -37,6 +37,7 @@ public class CategoryDaoImp {
         for (QueryDocumentSnapshot document : documents) {
             Category category = document.toObject(Category.class);
             category.setDishes(dishDao.getAllDishesFromCategory(restaurantId, menuId, category.getUid()));
+            categories.add(category);
         }
 
         logger.info("CategoryDao: All categories successfully obtained");
