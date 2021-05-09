@@ -51,7 +51,7 @@ public class MenuDaoImpl {
                 List<Dish> dishes = new ArrayList<>();
 
                 for (QueryDocumentSnapshot dishDoc : dishesDoc) {
-                    Dish dish = dishDoc.toObject(Dish.class)
+                    Dish dish = dishDoc.toObject(Dish.class);
                     dishes.add(dish);
                 }
                 category.setDishes(dishes);
