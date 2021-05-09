@@ -82,6 +82,24 @@ public class MenuServiceImpl implements MenuService {
         return dish;
     }
 
+    @Override
+    public boolean deleteDish(String restaurantId, String categoryId, String dishId) {
+        logger.info("MenuService: deleting dish");
+        try {
+            Menu menu =  menuDao.getMenuFromRestaurant(restaurantId);
+
+            if (StringUtils.isBlank(menu.getUid())) {
+                return false;
+            }
+            dishDao.deleteDish(restaurantId, menu.getUid(), categoryId, dishId);
+        }catch (ExecutionException e) {
+            throw new EasyOrderBackendException(HttpStatus.INTERNAL_SERVER_ERROR, "Backend server error: Process aborted");
+        } catch (InterruptedException e) {
+            throw new EasyOrderBackendException(HttpStatus.INTERNAL_SERVER_ERROR, "Backend server error: Process interrupted");
+        }
+        return true;
+    }
+
     @Autowired
     private void setCategoryDao(CategoryDaoImp categoryDao) {
         this.categoryDao = categoryDao;

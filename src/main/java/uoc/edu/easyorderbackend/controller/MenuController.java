@@ -66,7 +66,22 @@ public class MenuController {
         return response;
     }
 
-    @Autowired
+    @DeleteMapping
+    public ResponseEntity<Boolean> deleteDish(@PathVariable String restaurantId, @PathVariable String categoryId, @RequestBody String dishId) {
+        logger.info("MenuController: delete dish");
+        ResponseEntity<Boolean> response;
+        if (StringUtils.isNotBlank(restaurantId) && StringUtils.isNotBlank(categoryId) && StringUtils.isNotBlank(dishId)) {
+            boolean deleted = menuService.deleteDish(restaurantId, categoryId, dishId);
+            response = new ResponseEntity<Boolean>(deleted, HttpStatus.OK);
+        } else {
+            throw new EasyOrderBackendException(HttpStatus.BAD_REQUEST, "Invalid ID");
+        }
+
+        logger.info("MenuController: Giving response");
+        return response;
+    }
+
+        @Autowired
     public void setMenuService(MenuService menuService) {
         this.menuService = menuService;
     }

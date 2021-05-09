@@ -1,10 +1,7 @@
 package uoc.edu.easyorderbackend.DAO.impl;
 
 import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.CollectionReference;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.QueryDocumentSnapshot;
-import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.firestore.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,6 +53,18 @@ public class DishDaoImpl {
         }
     }
 
+    public void deleteDish(String restaurantId, String menuId, String categoryId, String dishId) throws ExecutionException, InterruptedException {
+        logger.info("DishDao: Deleting dish");
+        dishColRef = getCollection(restaurantId, menuId, categoryId);
+        if (StringUtils.isNotBlank(restaurantId) && StringUtils.isNotBlank(menuId) && StringUtils.isNotBlank(categoryId)) {
+            DocumentReference dishDocRef = dishColRef.document(dishId);
+            ApiFuture<WriteResult> writeResult = dishDocRef.delete();
+            logger.info("DishDAO: dish from restaurant "+ restaurantId +" deleted "+ writeResult.get().getUpdateTime());
+        } else {
+            throw new EasyOrderBackendException(HttpStatus.BAD_REQUEST, "RestaurantId or MenuId or CategoryId is null");
+        }
+    }
+
     private CollectionReference getCollection(String restaurantId, String menuId, String categoryId) {
         return FirebaseInitialize.getFirestoreDb()
                 .collection(DbEasyOrderConstants.restaurantsCollection)
@@ -66,5 +75,4 @@ public class DishDaoImpl {
                 .document(categoryId)
                 .collection(DbEasyOrderConstants.dishesCollection);
     }
-
 }
