@@ -45,6 +45,19 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    @Override
+    public Order changeState(String restaurantId, String tableId, String orderId, String newState) {
+        logger.info("OrderService: Changing order state");
+
+        try {
+            return orderDao.changeState(restaurantId, tableId, orderId, newState);
+        } catch (ExecutionException e) {
+            throw new EasyOrderBackendException(HttpStatus.INTERNAL_SERVER_ERROR, "Backend server error: Process aborted");
+        } catch (InterruptedException e) {
+            throw new EasyOrderBackendException(HttpStatus.INTERNAL_SERVER_ERROR, "Backend server error: Process interrupted");
+        }
+    }
+
     @Autowired
     public void setOrderDao(OrderDaoImpl orderDao) {
         this.orderDao = orderDao;

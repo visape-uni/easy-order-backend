@@ -6,4 +6,5 @@ public final class EasyOrderConstants {
 
     public static final String notPaidOrderState = "NOT_PAID";
     public static final String paidOrderState = "PAID";
+    public static final String canceledOrderState = "CANCELED";
 }

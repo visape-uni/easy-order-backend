@@ -10,6 +10,7 @@ public class Order {
     private Integer price;
     private String state;
     private Long startedTime;
+    private Long endTime;
     private List<OrderedDish> orderedDishes;
 
     public Order() {
@@ -52,6 +53,14 @@ public class Order {
         return startedTime;
     }
 
+    public Long getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Long endTime) {
+        this.endTime = endTime;
+    }
+
     public void setStartedTime(Long startedTime) {
         this.startedTime = startedTime;
     }
@@ -71,6 +80,7 @@ public class Order {
         if (price != null) map.put("price", price);
         if (state != null) map.put("state", state);
         if (startedTime != null) map.put("startedTime", startedTime);
+        if (endTime != null) map.put("endTime", endTime);
         if (orderedDishes != null && !orderedDishes.isEmpty()) map.put("orderedDishes", orderedDishes);
 
         return map;

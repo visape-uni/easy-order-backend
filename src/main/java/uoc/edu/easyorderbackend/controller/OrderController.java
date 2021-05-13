@@ -6,10 +6,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import uoc.edu.easyorderbackend.constants.EasyOrderConstants;
 import uoc.edu.easyorderbackend.constants.UrlEasyOrderConstants;
 import uoc.edu.easyorderbackend.exceptions.EasyOrderBackendException;
 import uoc.edu.easyorderbackend.model.Order;
@@ -57,6 +55,30 @@ public class OrderController {
         logger.info("OrderController: Giving response");
         return response;
 
+    }
+
+    @PutMapping()
+    public ResponseEntity<Order> changeOrderState(@PathVariable String restaurantId, @PathVariable String tableId, @PathVariable String orderId, @RequestBody Order order) {
+        logger.info("OrderController: Change order state");
+        ResponseEntity<Order> response;
+
+        String newState = order.getState();
+
+        if (StringUtils.isNotBlank(newState) && correctState(newState)) {
+            Order newOrder = orderService.changeState(restaurantId, tableId, orderId, newState);
+            response = new ResponseEntity<>(newOrder, HttpStatus.OK);
+        } else {
+            throw new EasyOrderBackendException(HttpStatus.BAD_REQUEST, "Invalid State");
+        }
+
+        logger.info("OrderController: Giving response");
+        return response;
+    }
+
+    private boolean correctState(String newState) {
+        return (newState.equals(EasyOrderConstants.canceledOrderState)
+                || newState.equals(EasyOrderConstants.paidOrderState)
+                || newState.equals(EasyOrderConstants.notPaidOrderState));
     }
 
     @Autowired

@@ -49,6 +49,7 @@ public class TableServiceImpl implements TableService {
         }
     }
 
+    // If Empty table and order is not paid -> Order state to Canceled
     @Override
     public Table changeState(String restaurantId, String tableId, String newState) {
         logger.info("RestaurantService: Changing table state");
@@ -63,6 +64,13 @@ public class TableServiceImpl implements TableService {
                 List<Order> orderList = table.getOrderList() != null ? table.getOrderList() : new ArrayList<>();
                 orderList.add(order);
                 table.setOrderList(orderList);
+            } else if (newState.equals(EasyOrderConstants.emptyTableState)) {
+
+                Order order = orderDao.getLastOrderFromTable(restaurantId, tableId);
+                if (order != null && order.getState() != null
+                        && order.getState().equals(EasyOrderConstants.notPaidOrderState)) {
+                    orderDao.changeState(restaurantId, tableId, order.getUid(), EasyOrderConstants.canceledOrderState);
+                }
             }
 
             return table;
