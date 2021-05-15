@@ -33,7 +33,9 @@ public class MenuDaoImpl {
         if (!documents.isEmpty()) {
 
             menu = documents.get(0).toObject(Menu.class);
-            menu.setCategories(categoryDao.getAllCategoriesFromMenu(restaurantId, menu.getUid()));
+            if (getDishes) {
+                menu.setCategories(categoryDao.getAllCategoriesFromMenu(restaurantId, menu.getUid()));
+            }
         }
 
         logger.info("MenuDao: Menu successfully obtained");
