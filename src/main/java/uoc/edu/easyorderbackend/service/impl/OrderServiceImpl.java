@@ -58,6 +58,14 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    @Override
+    public Order saveOrder(String restaurantId, String tableId, Order order) {
+        logger.info("OrderService: Saving order");
+        String orderId = orderDao.saveToTable(restaurantId, tableId, order);
+        order.setUid(orderId);
+        return order;
+    }
+
     @Autowired
     public void setOrderDao(OrderDaoImpl orderDao) {
         this.orderDao = orderDao;

@@ -57,7 +57,24 @@ public class OrderController {
 
     }
 
-    @PutMapping()
+    @PostMapping(UrlEasyOrderConstants.saveOrder)
+    public ResponseEntity<Order> saveOrder(@PathVariable String restaurantId, @PathVariable String tableId, @RequestBody Order order) {
+        logger.info("OrderController: Save order");
+        ResponseEntity<Order> response;
+
+        if (StringUtils.isNotBlank(restaurantId)
+                && StringUtils.isNotBlank(tableId)) {
+            Order newOrder = orderService.saveOrder(restaurantId, tableId, order);
+            response = new ResponseEntity<>(newOrder, HttpStatus.OK);
+        } else {
+            throw new EasyOrderBackendException(HttpStatus.BAD_REQUEST, "Invalid ID");
+        }
+
+        logger.info("OrderController: Giving response");
+        return response;
+    }
+
+    @PutMapping(UrlEasyOrderConstants.changeOrderState)
     public ResponseEntity<Order> changeOrderState(@PathVariable String restaurantId, @PathVariable String tableId, @PathVariable String orderId, @RequestBody Order order) {
         logger.info("OrderController: Change order state");
         ResponseEntity<Order> response;
