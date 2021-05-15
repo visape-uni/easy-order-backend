@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import uoc.edu.easyorderbackend.DAO.impl.DishDaoImpl;
+import uoc.edu.easyorderbackend.DAO.impl.MenuDaoImpl;
 import uoc.edu.easyorderbackend.DAO.impl.OrderDaoImpl;
 import uoc.edu.easyorderbackend.exceptions.EasyOrderBackendException;
+import uoc.edu.easyorderbackend.model.Menu;
 import uoc.edu.easyorderbackend.model.Order;
 import uoc.edu.easyorderbackend.service.OrderService;
 
@@ -22,6 +24,7 @@ public class OrderServiceImpl implements OrderService {
 
     private OrderDaoImpl orderDao;
     private DishDaoImpl dishDao;
+    private MenuDaoImpl menuDao;
 
     @Override
     public List<Order> getOrdersFromTable(String restaurantId, String tableId) {
@@ -64,10 +67,20 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order saveOrder(String restaurantId, String tableId, Order order) {
         logger.info("OrderService: Saving order");
-        //TODO: Change Dish for DishRef
+
+        Menu menu = null;
+        try {
+            menu = menuDao.getMenuFromRestaurant(restaurantId, false);
+        } catch (ExecutionException e) {
+            throw new EasyOrderBackendException(HttpStatus.INTERNAL_SERVER_ERROR, "Backend server error: Process aborted");
+        } catch (InterruptedException e) {
+            throw new EasyOrderBackendException(HttpStatus.INTERNAL_SERVER_ERROR, "Backend server error: Process interrupted");
+        }
+
+        String menuId = menu.getUid();
         order.getOrderedDishes().forEach(orderedDish -> {
             if (orderedDish != null && orderedDish.getDish() != null) {
-                DocumentReference dishRef = dishDao.getReference(restaurantId, tableId, orderedDish.getCategoryId(), orderedDish.getDish().getUid());
+                DocumentReference dishRef = dishDao.getReference(restaurantId, menuId, orderedDish.getCategoryId(), orderedDish.getDish().getUid());
                 orderedDish.setDishRef(dishRef);
             }
         });
@@ -75,6 +88,11 @@ public class OrderServiceImpl implements OrderService {
         String orderId = orderDao.saveToTable(restaurantId, tableId, order);
         order.setUid(orderId);
         return order;
+    }
+
+    @Autowired
+    public void setMenuDao(MenuDaoImpl menuDao) {
+        this.menuDao = menuDao;
     }
 
     @Autowired

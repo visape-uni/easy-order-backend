@@ -30,7 +30,7 @@ public class MenuServiceImpl implements MenuService {
     public Menu getMenuFromRestaurant(String restaurantId) {
         logger.info("MenuService: Getting menu from restaurant");
         try {
-            return menuDao.getMenuFromRestaurant(restaurantId);
+            return menuDao.getMenuFromRestaurant(restaurantId, true);
         }catch (ExecutionException e) {
             throw new EasyOrderBackendException(HttpStatus.INTERNAL_SERVER_ERROR, "Backend server error: Process aborted");
         } catch (InterruptedException e) {
@@ -42,7 +42,7 @@ public class MenuServiceImpl implements MenuService {
     public Category createCategory(String restaurantId, Category category) {
         logger.info("MenuService: Creating category");
         try {
-            Menu menu =  menuDao.getMenuFromRestaurant(restaurantId);
+            Menu menu =  menuDao.getMenuFromRestaurant(restaurantId, false);
 
             if (StringUtils.isBlank(menu.getUid())) {
                 menu = menuDao.createMenu(restaurantId, menu);
@@ -64,7 +64,7 @@ public class MenuServiceImpl implements MenuService {
     public Dish createDish(String restaurantId, String categoryId, Dish dish) {
         logger.info("MenuService: Creating dish");
         try {
-            Menu menu =  menuDao.getMenuFromRestaurant(restaurantId);
+            Menu menu =  menuDao.getMenuFromRestaurant(restaurantId, false);
 
             if (StringUtils.isBlank(menu.getUid())) {
                 menu = menuDao.createMenu(restaurantId, menu);
@@ -86,12 +86,13 @@ public class MenuServiceImpl implements MenuService {
     public boolean deleteDish(String restaurantId, String categoryId, String dishId) {
         logger.info("MenuService: deleting dish");
         try {
-            Menu menu =  menuDao.getMenuFromRestaurant(restaurantId);
+            Menu menu =  menuDao.getMenuFromRestaurant(restaurantId, false);
 
-            if (StringUtils.isBlank(menu.getUid())) {
-                return false;
+            if (StringUtils.isNotBlank(menu.getUid())) {
+                dishDao.deleteDish(restaurantId, menu.getUid(), categoryId, dishId);
+            } else {
+                throw new EasyOrderBackendException(HttpStatus.NOT_FOUND, "Menu not found");
             }
-            dishDao.deleteDish(restaurantId, menu.getUid(), categoryId, dishId);
         }catch (ExecutionException e) {
             throw new EasyOrderBackendException(HttpStatus.INTERNAL_SERVER_ERROR, "Backend server error: Process aborted");
         } catch (InterruptedException e) {
