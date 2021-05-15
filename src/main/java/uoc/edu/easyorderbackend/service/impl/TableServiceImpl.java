@@ -58,7 +58,7 @@ public class TableServiceImpl implements TableService {
 
             if (newState.equals(EasyOrderConstants.occupiedTableState)) {
                 String uid = String.valueOf(Calendar.getInstance().getTimeInMillis());
-                Order order = new Order(uid, 0, EasyOrderConstants.notPaidOrderState, new ArrayList<>());
+                Order order = new Order(uid, 0.0, EasyOrderConstants.notPaidOrderState, new ArrayList<>());
                 orderDao.saveToTable(restaurantId, tableId, order);
 
                 List<Order> orderList = table.getOrderList() != null ? table.getOrderList() : new ArrayList<>();

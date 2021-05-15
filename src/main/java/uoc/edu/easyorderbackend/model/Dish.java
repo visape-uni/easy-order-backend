@@ -7,20 +7,20 @@ public class Dish {
     private String uid;
     private String name;
     private String description;
-    private double price;
-    private int calories;
+    private Double price;
+    private Integer calories;
 
     public Dish() {
     }
 
-    public Dish(String uid, String name, String description, double price) {
+    public Dish(String uid, String name, String description, Double price) {
         this.uid = uid;
         this.name = name;
         this.description = description;
         this.price = price;
     }
 
-    public Dish(String uid, String name, String description, double price, int calories) {
+    public Dish(String uid, String name, String description, Double price, int calories) {
         this.uid = uid;
         this.name = name;
         this.description = description;
@@ -52,11 +52,11 @@ public class Dish {
         this.description = description;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
@@ -74,8 +74,8 @@ public class Dish {
         if (uid != null) map.put("uid", uid);
         if (name != null) map.put("name", name);
         if (description != null) map.put("description", description);
-        map.put("price", price);
-        map.put("calories", calories);
+        if (price != null) map.put("price", price);
+        if (calories != null) map.put("calories", calories);
 
         return map;
     }

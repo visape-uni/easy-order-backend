@@ -7,7 +7,7 @@ import java.util.*;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Order {
     private String uid;
-    private Integer price;
+    private Double price;
     private String state;
     private Long startedTime;
     private Long endTime;
@@ -17,7 +17,7 @@ public class Order {
         orderedDishes = new ArrayList<>();
     }
 
-    public Order(String uid, Integer price, String state, List<OrderedDish> orderedDishes) {
+    public Order(String uid, Double price, String state, List<OrderedDish> orderedDishes) {
         this.uid = uid;
         this.price = price;
         this.state = state;
@@ -33,11 +33,11 @@ public class Order {
         this.uid = uid;
     }
 
-    public Integer getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

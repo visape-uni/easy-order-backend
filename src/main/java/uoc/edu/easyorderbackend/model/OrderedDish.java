@@ -8,7 +8,7 @@ import com.google.cloud.firestore.DocumentReference;
 public class OrderedDish {
     private String uid;
     private Integer quantity;
-    private Integer totalPrice;
+    private Double totalPrice;
     private Dish dish;
     @JsonIgnore
     private DocumentReference dishRef;
@@ -16,7 +16,7 @@ public class OrderedDish {
     public OrderedDish() {
     }
 
-    public OrderedDish(String uid, Integer quantity, Integer totalPrice, Dish dish) {
+    public OrderedDish(String uid, Integer quantity, double totalPrice, Dish dish) {
         this.uid = uid;
         this.quantity = quantity;
         this.totalPrice = totalPrice;
@@ -39,11 +39,11 @@ public class OrderedDish {
         this.quantity = quantity;
     }
 
-    public Integer getTotalPrice() {
+    public Double getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(Integer totalPrice) {
+    public void setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
     }
 
