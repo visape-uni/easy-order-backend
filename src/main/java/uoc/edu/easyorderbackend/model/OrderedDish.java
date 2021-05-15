@@ -9,6 +9,7 @@ public class OrderedDish {
     private String uid;
     private Integer quantity;
     private Double totalPrice;
+    private String categoryId;
     private Dish dish;
     @JsonIgnore
     private DocumentReference dishRef;
@@ -16,10 +17,11 @@ public class OrderedDish {
     public OrderedDish() {
     }
 
-    public OrderedDish(String uid, Integer quantity, double totalPrice, Dish dish) {
+    public OrderedDish(String uid, Integer quantity, Double totalPrice, String categoryId, Dish dish) {
         this.uid = uid;
         this.quantity = quantity;
         this.totalPrice = totalPrice;
+        this.categoryId = categoryId;
         this.dish = dish;
     }
 
@@ -45,6 +47,14 @@ public class OrderedDish {
 
     public void setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
     }
 
     public Dish getDish() {

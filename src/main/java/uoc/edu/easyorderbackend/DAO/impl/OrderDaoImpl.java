@@ -81,8 +81,15 @@ public class OrderDaoImpl {
         logger.info("OrderDao: Saving Order");
         orderColRef = getCollection(restaurantId, tableId);
 
+        order.getOrderedDishes().forEach(orderedDish -> {
+            //Don't save dish
+            if (orderedDish != null && orderedDish.getDish() != null) {
+                orderedDish.setDish(null);
+            }
+        });
+
         if (StringUtils.isNotBlank(restaurantId) && StringUtils.isNotBlank(tableId)
-        && StringUtils.isNotBlank(order.getUid())) {
+            && StringUtils.isNotBlank(order.getUid())) {
             DocumentReference orderDocRef = orderColRef.document(order.getUid());
 
             orderDocRef.set(order.toMap());

@@ -5,6 +5,7 @@ import com.google.cloud.firestore.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import uoc.edu.easyorderbackend.constants.DbEasyOrderConstants;
@@ -21,6 +22,27 @@ public class DishDaoImpl {
     private final static Logger logger = LoggerFactory.getLogger(DishDaoImpl.class);
 
     private CollectionReference dishColRef;
+
+    private CategoryDaoImp categoryDao;
+
+    public DocumentReference getReference(String restaurantId, String menuId, String categoryId, String dishId) {
+        logger.info("RestaurantDao: getting reference");
+
+        //TODO: BUSCAR DISH ENTRE TODAS LAS CATEGORIAS DEL MENU
+
+        dishColRef = getCollection(restaurantId, menuId, categoryId);
+
+        DocumentReference dishRef = dishColRef.document(dishId);
+        try {
+            if (dishRef.get().get().exists()) {
+                return dishRef;
+            } else {
+                throw new EasyOrderBackendException(HttpStatus.NOT_FOUND, "Dish not found");
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            throw new EasyOrderBackendException(HttpStatus.NOT_FOUND, "Dish not found");
+        }
+    }
 
     public List<Dish> getAllDishesFromCategory(String restaurantId, String menuId, String categoryId) throws ExecutionException, InterruptedException {
         logger.info("DishDao: Get all dishes from category");
@@ -74,5 +96,10 @@ public class DishDaoImpl {
                 .collection(DbEasyOrderConstants.categoriesCollection)
                 .document(categoryId)
                 .collection(DbEasyOrderConstants.dishesCollection);
+    }
+
+    @Autowired
+    public void setCategoryDato(CategoryDaoImp categoryDao) {
+        this.categoryDao = categoryDao;
     }
 }
