@@ -45,7 +45,7 @@ public class OrderDaoImpl {
 
         Order order = new Order();
 
-        ApiFuture<QuerySnapshot> futureQuery = orderColRef.limit(1).get();
+        ApiFuture<QuerySnapshot> futureQuery = orderColRef.orderBy("uid", Query.Direction.DESCENDING).limit(1).get();
 
         List<QueryDocumentSnapshot> documents = futureQuery.get().getDocuments();
         if (!documents.isEmpty()) {
