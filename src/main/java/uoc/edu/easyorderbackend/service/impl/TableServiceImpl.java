@@ -75,7 +75,7 @@ public class TableServiceImpl implements TableService {
                 if (newState.equals(EasyOrderConstants.occupiedTableState)) {
                     // Editar tableId del user
                     Map<String, Object> userUpdateMap = new HashMap<>();
-                    userUpdateMap.put(USER_TABLEID_KEY, tableId);
+                    userUpdateMap.put(USER_TABLEID_KEY, restaurantId + "/" + tableId);
 
                     User user = new User();
                     user.setUid(table.getUserId());
@@ -92,7 +92,7 @@ public class TableServiceImpl implements TableService {
                 } else if (newState.equals(EasyOrderConstants.emptyTableState)) {
                     // Editar tableId del user
                     Map<String, Object> userUpdateMap = new HashMap<>();
-                    userUpdateMap.put(USER_TABLEID_KEY, tableId);
+                    userUpdateMap.put(USER_TABLEID_KEY, "");
 
                     String userId = optTable.get().getUserId();
                     User user = new User();
