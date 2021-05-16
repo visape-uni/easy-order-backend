@@ -1,10 +1,13 @@
 package uoc.edu.easyorderbackend.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Category {
     private String uid;
     private String name;

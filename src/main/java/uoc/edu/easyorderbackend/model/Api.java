@@ -1,6 +1,6 @@
 package uoc.edu.easyorderbackend.model;
 
-
+@Deprecated
 public class Api {
 
     private String id;

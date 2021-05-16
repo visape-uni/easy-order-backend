@@ -2,6 +2,7 @@ package uoc.edu.easyorderbackend.model;
 
 import java.util.List;
 
+@Deprecated
 public class AllergicGroup {
     private String uid;
     private String name;

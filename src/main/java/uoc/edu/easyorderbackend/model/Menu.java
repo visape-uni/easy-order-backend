@@ -1,9 +1,12 @@
 package uoc.edu.easyorderbackend.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Menu {
     private String uid;
     private List<Category> categories;

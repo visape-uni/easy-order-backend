@@ -1,5 +1,6 @@
 package uoc.edu.easyorderbackend.model;
 
+@Deprecated
 public class Aliment {
     private String uid;
     private String name;

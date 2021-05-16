@@ -1,8 +1,11 @@
 package uoc.edu.easyorderbackend.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.HashMap;
 import java.util.Map;
 
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Dish {
     private String uid;
     private String name;
