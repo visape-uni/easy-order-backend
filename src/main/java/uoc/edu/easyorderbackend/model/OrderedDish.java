@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.cloud.firestore.DocumentReference;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class OrderedDish {
     private String uid;
@@ -71,5 +74,16 @@ public class OrderedDish {
 
     public void setDishRef(DocumentReference dishRef) {
         this.dishRef = dishRef;
+    }
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> map = new HashMap<>();
+
+        if (uid != null) map.put("uid", uid);
+        if (quantity != null) map.put("quantity", quantity);
+        if (totalPrice != null) map.put("totalPrice", totalPrice);
+        if (categoryId != null) map.put("categoryId", categoryId);
+
+        return map;
     }
 }

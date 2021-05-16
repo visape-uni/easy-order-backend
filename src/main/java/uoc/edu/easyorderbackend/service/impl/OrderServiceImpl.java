@@ -94,7 +94,6 @@ public class OrderServiceImpl implements OrderService {
     public void setMenuDao(MenuDaoImpl menuDao) {
         this.menuDao = menuDao;
     }
-
     @Autowired
     public void setDishDao(DishDaoImpl dishDao) {
         this.dishDao = dishDao;

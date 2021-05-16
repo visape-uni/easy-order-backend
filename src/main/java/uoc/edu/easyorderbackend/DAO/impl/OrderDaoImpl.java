@@ -81,18 +81,21 @@ public class OrderDaoImpl {
         logger.info("OrderDao: Saving Order");
         orderColRef = getCollection(restaurantId, tableId);
 
-        order.getOrderedDishes().forEach(orderedDish -> {
-            //Don't save dish
-            if (orderedDish != null && orderedDish.getDish() != null) {
-                orderedDish.setDish(null);
-            }
-        });
-
         if (StringUtils.isNotBlank(restaurantId) && StringUtils.isNotBlank(tableId)
             && StringUtils.isNotBlank(order.getUid())) {
             DocumentReference orderDocRef = orderColRef.document(order.getUid());
 
             orderDocRef.set(order.toMap());
+
+            order.getOrderedDishes().forEach(orderedDish -> {
+                try {
+                    orderedDishDao.save(restaurantId, tableId, order.getUid(), orderedDish);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw new EasyOrderBackendException(HttpStatus.INTERNAL_SERVER_ERROR, "Error saving orderedDish");
+                }
+            });
+
             logger.info("OrderDao: order from restaurant "+ restaurantId +" and table "+ tableId +" saved with ID: " + order.getUid());
             return order.getUid();
         } else {

@@ -2,12 +2,16 @@ package uoc.edu.easyorderbackend.DAO.impl;
 
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import uoc.edu.easyorderbackend.constants.DbEasyOrderConstants;
+import uoc.edu.easyorderbackend.exceptions.EasyOrderBackendException;
 import uoc.edu.easyorderbackend.firebase.FirebaseInitialize;
 import uoc.edu.easyorderbackend.model.OrderedDish;
 
@@ -46,9 +50,23 @@ public class OrderedDishDaoImpl {
         return orderedDishes;
     }
 
-    public String save(OrderedDish orderedDish) throws Exception {
-        return null;
+    public String save(String restaurantId, String tableId, String orderId, OrderedDish orderedDish) throws Exception {
+        logger.info("OrderedDishDao: Saving orderedDish");
+
+        orderedDishColRef = getCollection(restaurantId, tableId, orderId);
+
+        if (StringUtils.isNotBlank(restaurantId) && StringUtils.isNotBlank(tableId)
+            && StringUtils.isNotBlank(orderId)) {
+            DocumentReference orderedDishRef = orderedDishColRef.document(orderedDish.getUid());
+            orderedDishRef.set(orderedDish.toMap());
+
+            logger.info("OrderedDishDao: orderedDish saved");
+            return orderedDish.getUid();
+        } else {
+            throw new EasyOrderBackendException(HttpStatus.BAD_REQUEST, "RestaurantId or TableId or OrderId is null");
+        }
     }
+
     public void update(OrderedDish orderedDish, String[] params) {
 
     }

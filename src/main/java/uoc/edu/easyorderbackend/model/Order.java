@@ -81,7 +81,6 @@ public class Order {
         if (state != null) map.put("state", state);
         if (startedTime != null) map.put("startedTime", startedTime);
         if (endTime != null) map.put("endTime", endTime);
-        if (orderedDishes != null && !orderedDishes.isEmpty()) map.put("orderedDishes", orderedDishes);
 
         return map;
     }
