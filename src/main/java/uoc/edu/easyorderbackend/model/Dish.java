@@ -10,14 +10,14 @@ public class Dish {
     private String uid;
     private String name;
     private String description;
-    private Long price;
+    private Float price;
 
     //private Integer calories;
 
     public Dish() {
     }
 
-    public Dish(String uid, String name, String description, Long price) {
+    public Dish(String uid, String name, String description, Float price) {
         this.uid = uid;
         this.name = name;
         this.description = description;
@@ -48,11 +48,11 @@ public class Dish {
         this.description = description;
     }
 
-    public Long getPrice() {
+    public Float getPrice() {
         return price;
     }
 
-    public void setPrice(Long price) {
+    public void setPrice(Float price) {
         this.price = price;
     }
 
