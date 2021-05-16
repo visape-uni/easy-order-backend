@@ -83,6 +83,7 @@ public class OrderedDish {
         if (quantity != null) map.put("quantity", quantity);
         if (totalPrice != null) map.put("totalPrice", totalPrice);
         if (categoryId != null) map.put("categoryId", categoryId);
+        if (dishRef != null) map.put("dishRef", dishRef);
 
         return map;
     }

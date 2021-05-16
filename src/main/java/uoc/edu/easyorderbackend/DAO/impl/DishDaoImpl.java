@@ -14,6 +14,7 @@ import uoc.edu.easyorderbackend.model.Dish;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 @Repository
@@ -24,8 +25,6 @@ public class DishDaoImpl {
 
     public DocumentReference getReference(String restaurantId, String menuId, String categoryId, String dishId) {
         logger.info("RestaurantDao: getting reference");
-
-        //TODO: BUSCAR DISH ENTRE TODAS LAS CATEGORIAS DEL MENU
 
         dishColRef = getCollection(restaurantId, menuId, categoryId);
 
@@ -39,6 +38,17 @@ public class DishDaoImpl {
         } catch (InterruptedException | ExecutionException e) {
             throw new EasyOrderBackendException(HttpStatus.NOT_FOUND, "Dish not found");
         }
+    }
+
+    public Optional<Dish> getFromRef(DocumentReference dishRef) throws ExecutionException, InterruptedException {
+        logger.info("DishDao: getting dish from Reference");
+        Dish dish = null;
+        if (dishRef != null) {
+            ApiFuture<DocumentSnapshot> dishSnapshot = dishRef.get();
+            dish = dishSnapshot.get().toObject(Dish.class);
+        }
+        logger.info("DishDao: dish successfully obtained");
+        return Optional.ofNullable(dish);
     }
 
     public List<Dish> getAllDishesFromCategory(String restaurantId, String menuId, String categoryId) throws ExecutionException, InterruptedException {

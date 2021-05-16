@@ -8,11 +8,13 @@ import com.google.cloud.firestore.QuerySnapshot;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import uoc.edu.easyorderbackend.constants.DbEasyOrderConstants;
 import uoc.edu.easyorderbackend.exceptions.EasyOrderBackendException;
 import uoc.edu.easyorderbackend.firebase.FirebaseInitialize;
+import uoc.edu.easyorderbackend.model.Dish;
 import uoc.edu.easyorderbackend.model.OrderedDish;
 
 import java.util.ArrayList;
@@ -26,6 +28,7 @@ public class OrderedDishDaoImpl {
     private final static Logger logger = LoggerFactory.getLogger(OrderedDishDaoImpl.class);
 
     private CollectionReference orderedDishColRef;
+    private DishDaoImpl dishDao;
 
     public Optional<OrderedDish> get(String id) throws ExecutionException, InterruptedException {
         return Optional.empty();
@@ -42,7 +45,13 @@ public class OrderedDishDaoImpl {
         List<QueryDocumentSnapshot> documents = futureQuery.get().getDocuments();
         for(QueryDocumentSnapshot document : documents) {
             //TODO: GET DISH FROM REF
-            orderedDishes.add(document.toObject(OrderedDish.class));
+            OrderedDish orderedDish = document.toObject(OrderedDish.class);
+
+            Optional<Dish> optionalDish = dishDao.getFromRef(orderedDish.getDishRef());
+            if (optionalDish.isPresent()) {
+                orderedDish.setDish(optionalDish.get());
+            }
+            orderedDishes.add(orderedDish);
         }
         orderedDishes.sort(Comparator.comparing(OrderedDish::getUid));
         logger.info("OrderedDishDao: All orderedDishes successfully obtained");
@@ -84,5 +93,10 @@ public class OrderedDishDaoImpl {
                 .collection(DbEasyOrderConstants.ordersCollection)
                 .document(orderId)
                 .collection(DbEasyOrderConstants.orderedDishesCollection);
+    }
+
+    @Autowired
+    public void setDishDao(DishDaoImpl dishDao) {
+        this.dishDao = dishDao;
     }
 }
