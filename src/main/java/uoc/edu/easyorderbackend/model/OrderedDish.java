@@ -11,7 +11,7 @@ import java.util.Map;
 public class OrderedDish {
     private String uid;
     private Integer quantity;
-    private Double totalPrice;
+    private Long totalPrice;
     private String categoryId;
     private Dish dish;
     @JsonIgnore
@@ -20,7 +20,7 @@ public class OrderedDish {
     public OrderedDish() {
     }
 
-    public OrderedDish(String uid, Integer quantity, Double totalPrice, String categoryId, Dish dish) {
+    public OrderedDish(String uid, Integer quantity, Long totalPrice, String categoryId, Dish dish) {
         this.uid = uid;
         this.quantity = quantity;
         this.totalPrice = totalPrice;
@@ -44,11 +44,11 @@ public class OrderedDish {
         this.quantity = quantity;
     }
 
-    public Double getTotalPrice() {
+    public Long getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(Double totalPrice) {
+    public void setTotalPrice(Long totalPrice) {
         this.totalPrice = totalPrice;
     }
 

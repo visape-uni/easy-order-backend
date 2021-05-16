@@ -10,14 +10,14 @@ public class Dish {
     private String uid;
     private String name;
     private String description;
-    private Double price;
+    private Long price;
 
     //private Integer calories;
 
     public Dish() {
     }
 
-    public Dish(String uid, String name, String description, Double price) {
+    public Dish(String uid, String name, String description, Long price) {
         this.uid = uid;
         this.name = name;
         this.description = description;
@@ -48,11 +48,11 @@ public class Dish {
         this.description = description;
     }
 
-    public Double getPrice() {
+    public Long getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(Long price) {
         this.price = price;
     }
 
