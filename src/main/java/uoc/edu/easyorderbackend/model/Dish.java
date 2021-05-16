@@ -11,7 +11,8 @@ public class Dish {
     private String name;
     private String description;
     private Double price;
-    private Integer calories;
+
+    //private Integer calories;
 
     public Dish() {
     }
@@ -21,14 +22,6 @@ public class Dish {
         this.name = name;
         this.description = description;
         this.price = price;
-    }
-
-    public Dish(String uid, String name, String description, Double price, int calories) {
-        this.uid = uid;
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.calories = calories;
     }
 
     public String getUid() {
@@ -63,13 +56,14 @@ public class Dish {
         this.price = price;
     }
 
+    /*
     public int getCalories() {
         return calories;
     }
 
     public void setCalories(int calories) {
         this.calories = calories;
-    }
+    }*/
 
     public Map<String, Object> toMap() {
         Map<String, Object> map = new HashMap<>();
@@ -78,7 +72,7 @@ public class Dish {
         if (name != null) map.put("name", name);
         if (description != null) map.put("description", description);
         if (price != null) map.put("price", price);
-        if (calories != null) map.put("calories", calories);
+        //if (calories != null) map.put("calories", calories);
 
         return map;
     }
