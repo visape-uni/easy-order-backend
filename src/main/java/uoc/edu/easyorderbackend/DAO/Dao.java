@@ -3,6 +3,7 @@ package uoc.edu.easyorderbackend.DAO;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
@@ -15,7 +16,7 @@ public interface Dao<T> {
 
     String save(T t) throws Exception;
 
-    void update(T t, String[] params);
+    void update(T t, Map<String, Object> updateMap) throws ExecutionException, InterruptedException;
 
     void delete(T t);
 

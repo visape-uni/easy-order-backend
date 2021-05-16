@@ -88,8 +88,18 @@ public class TableDaoImpl {
     }
 
 
-    public void update(Table table, String[] params) {
+    public Table update(String restaurantId, String tableId, Map<String, Object> updateMap) throws ExecutionException, InterruptedException {
+        tablesColRef = getCollection(restaurantId);
 
+        ApiFuture<WriteResult> future = tablesColRef.document(tableId).update(updateMap);
+        logger.info("TableDao: Table update: " + future.get());
+
+        Optional<Table> optTable = this.get(restaurantId, tableId);
+        if (optTable.isPresent()) {
+            return optTable.get();
+        } else {
+            throw new EasyOrderBackendException(HttpStatus.NOT_FOUND, "Table does not exist");
+        }
     }
 
 

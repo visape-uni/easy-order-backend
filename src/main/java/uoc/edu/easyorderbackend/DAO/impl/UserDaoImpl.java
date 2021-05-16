@@ -18,6 +18,7 @@ import uoc.edu.easyorderbackend.model.User;
 import uoc.edu.easyorderbackend.model.Worker;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
@@ -109,8 +110,11 @@ public class UserDaoImpl implements Dao<User> {
     }
 
     @Override
-    public void update(User user, String[] params) {
+    public void update(User user, Map<String, Object> updateMap) throws ExecutionException, InterruptedException {
+        usersColRef = getCollection();
 
+        ApiFuture<WriteResult> future = usersColRef.document(user.getUid()).update(updateMap);
+        logger.info("UserDao: Updating user: " + future.get());
 
     }
 

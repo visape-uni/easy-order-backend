@@ -7,6 +7,7 @@ import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Client extends User {
+    private String tableId;
     private List<Aliment> allergies;
 
     public Client() {
@@ -14,9 +15,18 @@ public class Client extends User {
         allergies = new ArrayList<>();
     }
 
-    public Client(List<Aliment> allergies) {
+    public Client(String tableId, List<Aliment> allergies) {
         super();
+        this.tableId = tableId;
         this.allergies = allergies;
+    }
+
+    public String getTableId() {
+        return tableId;
+    }
+
+    public void setTableId(String tableId) {
+        this.tableId = tableId;
     }
 
     public List<Aliment> getAllergies() {

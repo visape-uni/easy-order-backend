@@ -18,6 +18,7 @@ import uoc.edu.easyorderbackend.model.Restaurant;
 import uoc.edu.easyorderbackend.model.Table;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
@@ -117,7 +118,7 @@ public class RestaurantDaoImpl implements Dao<Restaurant> {
     }
 
     @Override
-    public void update(Restaurant restaurant, String[] params) {
+    public void update(Restaurant restaurant, Map<String, Object> updateMap) {
 
     }
 

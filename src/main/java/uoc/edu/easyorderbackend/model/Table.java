@@ -12,15 +12,17 @@ public class Table {
     private Integer capacity;
     private String state;
     private List<Order> orderList;
+    private String userId;
 
     public Table() {
     }
 
-    public Table(String uid, Integer capacity, String state, List<Order> orderList) {
+    public Table(String uid, Integer capacity, String state, List<Order> orderList, String userId) {
         this.uid = uid;
         this.capacity = capacity;
         this.state = state;
         this.orderList = orderList;
+        this.userId = userId;
     }
 
     public String getUid() {
@@ -55,6 +57,14 @@ public class Table {
         this.orderList = orderList;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     @Override
     public String toString() {
         return "Table{" +
@@ -62,6 +72,7 @@ public class Table {
                 ", capacity=" + capacity +
                 ", state='" + state + '\'' +
                 ", orderList=" + orderList +
+                ", userId=" + userId +
                 '}';
     }
 
@@ -71,6 +82,7 @@ public class Table {
         if (uid != null) map.put("uid", uid);
         if (capacity != null) map.put("capacity", capacity);
         if (state != null) map.put("state", state);
+        if (userId != null) map.put("userId", userId);
 
         return map;
     }

@@ -69,7 +69,7 @@ public class TableController {
 
         if (StringUtils.isNotBlank(newState) && correctState(newState)) {
             if (StringUtils.isNotBlank(restaurantId) && StringUtils.isNotBlank(tableId)) {
-                Table newTable = tableService.changeState(restaurantId, tableId, newState);
+                Table newTable = tableService.changeState(restaurantId, tableId, table);
                 response = new ResponseEntity<>(newTable, HttpStatus.OK);
             } else {
                 throw new EasyOrderBackendException(HttpStatus.BAD_REQUEST, "Invalid ID");
