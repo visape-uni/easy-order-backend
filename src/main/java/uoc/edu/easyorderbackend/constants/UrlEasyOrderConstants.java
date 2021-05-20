@@ -11,6 +11,7 @@ public final class UrlEasyOrderConstants {
     public static final String tableUrl = apiUrl + "/table";
     public static final String orderUrl = apiUrl + "/order";
     public static final String menuUrl = apiUrl + "/menu";
+    public static final String paymentUrl = apiUrl + "/payment";
 
     public static final String getFromRestaurant = "/getFromRestaurant/{restaurantId}";
     public static final String getLastOrder = "/getLast/{restaurantId}/{tableId}";
@@ -30,7 +31,8 @@ public final class UrlEasyOrderConstants {
 
     public static final String deleteDish = "/deleteDish/{restaurantId}/{categoryId}/{dishId}";
 
+    public static final String checkoutPayment = "/checkout";
+
     public static final String createUrl = "/create";
     public static final String getUrl = "/get/{uid}";
-
 }
