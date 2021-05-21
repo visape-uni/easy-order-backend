@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
             return newUser;
         } catch (FirebaseAuthException e) {
             logger.error("UserService: {}", e.getMessage());
-            throw new EasyOrderBackendException(HttpStatus.UNAUTHORIZED , "Firebase error: " + e.getMessage());
+            throw new EasyOrderBackendException(HttpStatus.BAD_REQUEST , "Firebase error: " + e.getMessage());
         }
     }
 

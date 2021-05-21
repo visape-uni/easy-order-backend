@@ -18,7 +18,7 @@ import uoc.edu.easyorderbackend.constants.UrlEasyOrderConstants;
 import uoc.edu.easyorderbackend.model.Order;
 import uoc.edu.easyorderbackend.model.PaymentResponse;
 
-
+@Deprecated
 @RestController
 @RequestMapping(UrlEasyOrderConstants.paymentUrl)
 public class PaymentController {
