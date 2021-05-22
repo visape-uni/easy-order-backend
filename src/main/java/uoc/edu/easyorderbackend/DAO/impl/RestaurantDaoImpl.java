@@ -4,6 +4,7 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.WriteResult;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -118,7 +119,11 @@ public class RestaurantDaoImpl implements Dao<Restaurant> {
     }
 
     @Override
-    public void update(Restaurant restaurant, Map<String, Object> updateMap) {
+    public void update(Restaurant restaurant, Map<String, Object> updateMap) throws ExecutionException, InterruptedException {
+        restaurantsColRef = getCollection();
+
+        ApiFuture<WriteResult> future = restaurantsColRef.document(restaurant.getUid()).update(updateMap);
+        logger.info("RestaurantDao: Restaurnat update: " + future.get());
 
     }
 

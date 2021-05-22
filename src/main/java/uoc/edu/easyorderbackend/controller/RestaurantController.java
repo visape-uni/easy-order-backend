@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import uoc.edu.easyorderbackend.constants.UrlEasyOrderConstants;
 import uoc.edu.easyorderbackend.exceptions.EasyOrderBackendException;
 import uoc.edu.easyorderbackend.model.Restaurant;
+import uoc.edu.easyorderbackend.model.Worker;
 import uoc.edu.easyorderbackend.service.RestaurantService;
 
 @RestController
@@ -59,6 +60,23 @@ public class RestaurantController {
         logger.info("RestaurantController: Giving response");
         logger.info("RestaurantController: logger");
         logger.info("RestaurantController: " + response.getBody());
+        return response;
+    }
+
+    @PutMapping(UrlEasyOrderConstants.addWorkerUrl)
+    public ResponseEntity<Worker> addWorker(@PathVariable String restaurantId, String workerId) {
+        logger.info("RestaurantController: Addworker");
+        ResponseEntity<Worker> response;
+
+        if (StringUtils.isNotBlank(restaurantId)
+            && StringUtils.isNotBlank(workerId)) {
+            Worker worker = restaurantService.addWorker(restaurantId, workerId);
+            response = new ResponseEntity<>(worker, HttpStatus.OK);
+        } else {
+            throw new EasyOrderBackendException(HttpStatus.BAD_REQUEST, "RestaurantId or WorkerId is empty");
+        }
+
+        logger.info("RestaurantController: Giving repsonse");
         return response;
     }
 

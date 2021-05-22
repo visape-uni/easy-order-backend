@@ -95,6 +95,10 @@ public class Restaurant {
         this.workers = workers;
     }
 
+    public void addWorker(Worker worker) {
+        this.workers.add(worker);
+    }
+
     public String getStreet() {
         return street;
     }

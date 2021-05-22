@@ -35,4 +35,6 @@ public final class UrlEasyOrderConstants {
 
     public static final String createUrl = "/create";
     public static final String getUrl = "/get/{uid}";
+
+    public static final String addWorkerUrl = "/addWorker/{restaurantId}/{workerId}";
 }

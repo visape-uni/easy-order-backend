@@ -14,6 +14,8 @@ import uoc.edu.easyorderbackend.model.User;
 import uoc.edu.easyorderbackend.model.Worker;
 import uoc.edu.easyorderbackend.service.RestaurantService;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
@@ -22,8 +24,9 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     private final static Logger logger = LoggerFactory.getLogger(RestaurantServiceImpl.class);
 
-    private RestaurantDaoImpl restaurantDao;
+    private final static String WORKERS_STATE_KEY = "workers";
 
+    private RestaurantDaoImpl restaurantDao;
     private UserDaoImpl userDao;
 
 
@@ -85,6 +88,36 @@ public class RestaurantServiceImpl implements RestaurantService {
                 return optionalRestaurant.get();
             } else {
                 throw new EasyOrderBackendException(HttpStatus.NOT_FOUND, "Restaurant not found");
+            }
+        }  catch (ExecutionException e) {
+            throw new EasyOrderBackendException(HttpStatus.INTERNAL_SERVER_ERROR, "Backend server error: Process aborted");
+        } catch (InterruptedException e) {
+            throw new EasyOrderBackendException(HttpStatus.INTERNAL_SERVER_ERROR, "Backend server error: Process interrupted");
+        }
+    }
+
+    @Override
+    public Worker addWorker(String restaurantId, String workerId) {
+        try {
+            Optional<User> userOptional = userDao.get(workerId);
+            if (userOptional.isPresent()) {
+                Optional<Restaurant> optionalRestaurant = restaurantDao.get(restaurantId);
+                if (optionalRestaurant.isPresent()) {
+                    Restaurant restaurant = optionalRestaurant.get();
+                    Worker worker = (Worker) userOptional.get();
+
+                    restaurant.addWorker(worker);
+
+                    Map<String, Object> updateMap = new HashMap<>();
+                    updateMap.put(WORKERS_STATE_KEY, restaurant.getWorkers());
+                    restaurantDao.update(restaurant, updateMap);
+
+                    return worker;
+                } else {
+                    throw new EasyOrderBackendException(HttpStatus.NOT_FOUND, "Restaurant not found");
+                }
+            } else {
+                throw new EasyOrderBackendException(HttpStatus.NOT_FOUND, "Worker doesn't exist");
             }
         }  catch (ExecutionException e) {
             throw new EasyOrderBackendException(HttpStatus.INTERNAL_SERVER_ERROR, "Backend server error: Process aborted");
