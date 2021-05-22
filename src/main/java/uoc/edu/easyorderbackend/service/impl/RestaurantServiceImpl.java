@@ -25,6 +25,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     private final static Logger logger = LoggerFactory.getLogger(RestaurantServiceImpl.class);
 
     private final static String WORKERS_STATE_KEY = "workers";
+    private final static String RESTAURANT_REF_STATE_KEY = "restaurantRef";
 
     private RestaurantDaoImpl restaurantDao;
     private UserDaoImpl userDao;
@@ -108,9 +109,16 @@ public class RestaurantServiceImpl implements RestaurantService {
 
                     restaurant.addWorker(worker);
 
-                    Map<String, Object> updateMap = new HashMap<>();
-                    updateMap.put(WORKERS_STATE_KEY, restaurant.getWorkers());
-                    restaurantDao.update(restaurant, updateMap);
+                    Map<String, Object> updateRestaurantMap = new HashMap<>();
+                    updateRestaurantMap.put(WORKERS_STATE_KEY, restaurant.getWorkers());
+                    restaurantDao.update(restaurant, updateRestaurantMap);
+
+                    worker.setRestaurantRef(restaurantDao.getReference(restaurantId));
+
+                    Map<String, Object> updateWorkerMap = new HashMap<>();
+                    updateWorkerMap.put(RESTAURANT_REF_STATE_KEY , worker.getRestaurantRef());
+
+                    userDao.update(worker, updateWorkerMap);
 
                     return worker;
                 } else {
