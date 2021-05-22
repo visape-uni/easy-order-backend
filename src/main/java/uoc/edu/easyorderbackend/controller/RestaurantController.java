@@ -64,7 +64,7 @@ public class RestaurantController {
     }
 
     @PutMapping(UrlEasyOrderConstants.addWorkerUrl)
-    public ResponseEntity<Worker> addWorker(@PathVariable String restaurantId, String workerId) {
+    public ResponseEntity<Worker> addWorker(@PathVariable String restaurantId, @PathVariable String workerId) {
         logger.info("RestaurantController: Addworker");
         ResponseEntity<Worker> response;
 
