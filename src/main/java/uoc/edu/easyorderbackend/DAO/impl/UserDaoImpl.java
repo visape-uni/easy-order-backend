@@ -1,7 +1,10 @@
 package uoc.edu.easyorderbackend.DAO.impl;
 
 import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.*;
+import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.WriteResult;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +50,27 @@ public class UserDaoImpl implements Dao<User> {
         }
     }
 
+    public User getFromRef (DocumentReference userRef) throws ExecutionException, InterruptedException {
+        logger.info("UserDao: Getting user from ref");
+        User user = null;
+
+        if (userRef != null) {
+            ApiFuture<DocumentSnapshot> userSnapshot = userRef.get();
+
+            if (userSnapshot.get() != null
+                    && userSnapshot.get().get("isClient") != null
+                    && (Boolean) userSnapshot.get().get("isClient")) {
+                // isClient
+                user = userSnapshot.get().toObject(Client.class);
+            } else {
+                user = userSnapshot.get().toObject(Worker.class);
+            }
+
+            logger.info("UserDao: user successfully obtainer");
+        }
+        return user;
+    }
+
     @Override
     public Optional<User> get(String id) throws ExecutionException, InterruptedException {
         logger.info("UserDao: getting user");
@@ -67,7 +91,10 @@ public class UserDaoImpl implements Dao<User> {
             DocumentReference restaurantRef = (DocumentReference) userSnapshot.get().get("restaurantRef");
             Optional<Restaurant> optionalRestaurant = restaurantDao.getFromRef(restaurantRef);
             if (optionalRestaurant.isPresent()) {
-                ((Worker) user).setRestaurant(optionalRestaurant.get());
+                Restaurant restaurant = optionalRestaurant.get();
+                restaurant.setOwner((Worker) this.getFromRef(restaurant.getOwnerRef()));
+                //TODO: GET WORKERS LIST
+                ((Worker) user).setRestaurant(restaurant);
             }
         }
 
