@@ -80,6 +80,23 @@ public class RestaurantController {
         return response;
     }
 
+    @PutMapping(UrlEasyOrderConstants.removeWorkerUrl)
+    public ResponseEntity<Boolean> removeWorker(@PathVariable String restaurantId, @PathVariable String workerId) {
+        logger.info("RestaurantController: Addworker");
+        ResponseEntity<Boolean> response;
+
+        if (StringUtils.isNotBlank(restaurantId)
+                && StringUtils.isNotBlank(workerId)) {
+            Boolean removeConfirmation = restaurantService.removeWorker(restaurantId, workerId);
+            response = new ResponseEntity<>(removeConfirmation, HttpStatus.OK);
+        } else {
+            throw new EasyOrderBackendException(HttpStatus.BAD_REQUEST, "RestaurantId or WorkerId is empty");
+        }
+
+        logger.info("RestaurantController: Giving repsonse");
+        return response;
+    }
+
     @Autowired
     public void setRestaurantService(RestaurantService restaurantService) {
         this.restaurantService = restaurantService;

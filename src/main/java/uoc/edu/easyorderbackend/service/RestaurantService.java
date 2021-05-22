@@ -7,4 +7,5 @@ public interface RestaurantService {
     Restaurant createRestaurant(Restaurant restaurant);
     Restaurant getRestaurant(String uid);
     Worker addWorker(String restaurantId, String workerId);
+    Boolean removeWorker(String restaurantId, String workerId);
 }

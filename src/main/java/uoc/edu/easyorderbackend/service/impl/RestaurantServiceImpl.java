@@ -134,6 +134,43 @@ public class RestaurantServiceImpl implements RestaurantService {
         }
     }
 
+    @Override
+    public Boolean removeWorker(String restaurantId, String workerId) {
+        try {
+            Optional<User> userOptional = userDao.get(workerId);
+            if (userOptional.isPresent()) {
+                Optional<Restaurant> optionalRestaurant = restaurantDao.get(restaurantId);
+                if (optionalRestaurant.isPresent()) {
+                    Restaurant restaurant = optionalRestaurant.get();
+                    Worker worker = (Worker) userOptional.get();
+
+                    restaurant.removeWorker(worker);
+
+                    Map<String, Object> updateRestaurantMap = new HashMap<>();
+                    updateRestaurantMap.put(WORKERS_STATE_KEY, restaurant.getWorkers());
+                    restaurantDao.update(restaurant, updateRestaurantMap);
+
+                    worker.setRestaurantRef(null);
+
+                    Map<String, Object> updateWorkerMap = new HashMap<>();
+                    updateWorkerMap.put(RESTAURANT_REF_STATE_KEY , worker.getRestaurantRef());
+
+                    userDao.update(worker, updateWorkerMap);
+
+                    return true;
+                } else {
+                    throw new EasyOrderBackendException(HttpStatus.NOT_FOUND, "Restaurant not found");
+                }
+            } else {
+                throw new EasyOrderBackendException(HttpStatus.NOT_FOUND, "Worker doesn't exist");
+            }
+        }  catch (ExecutionException e) {
+            throw new EasyOrderBackendException(HttpStatus.INTERNAL_SERVER_ERROR, "Backend server error: Process aborted");
+        } catch (InterruptedException e) {
+            throw new EasyOrderBackendException(HttpStatus.INTERNAL_SERVER_ERROR, "Backend server error: Process interrupted");
+        }
+    }
+
     @Autowired
     public void setRestaurantDao(RestaurantDaoImpl restaurantDao) {
         this.restaurantDao = restaurantDao;

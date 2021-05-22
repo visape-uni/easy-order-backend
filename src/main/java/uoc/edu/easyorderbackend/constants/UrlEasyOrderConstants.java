@@ -37,4 +37,5 @@ public final class UrlEasyOrderConstants {
     public static final String getUrl = "/get/{uid}";
 
     public static final String addWorkerUrl = "/addWorker/{restaurantId}/{workerId}";
+    public static final String removeWorkerUrl = "/removeWorker/{restaurantId}/{workerId}";
 }
