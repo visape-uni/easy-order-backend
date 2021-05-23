@@ -51,7 +51,6 @@ public class RestaurantServiceImpl implements RestaurantService {
                 Optional<User> userOptional = userDao.get(ownerUid);
                 if (userOptional.isPresent()) {
 
-                    restaurant.setOwnerRef(null);
                     // Set Owner to true
                     Worker worker = (Worker) userOptional.get();
                     worker.setIsOwner(true);

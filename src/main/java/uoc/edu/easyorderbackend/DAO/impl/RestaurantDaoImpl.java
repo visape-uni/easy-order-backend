@@ -17,6 +17,7 @@ import uoc.edu.easyorderbackend.exceptions.EasyOrderBackendException;
 import uoc.edu.easyorderbackend.firebase.FirebaseInitialize;
 import uoc.edu.easyorderbackend.model.Restaurant;
 import uoc.edu.easyorderbackend.model.Table;
+import uoc.edu.easyorderbackend.model.Worker;
 
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,7 @@ public class RestaurantDaoImpl implements Dao<Restaurant> {
     private final static Logger logger = LoggerFactory.getLogger(RestaurantDaoImpl.class);
 
     private TableDaoImpl tableDao;
+    private UserDaoImpl userDao;
 
     private CollectionReference restaurantsColRef;
 
@@ -78,6 +80,8 @@ public class RestaurantDaoImpl implements Dao<Restaurant> {
             List<Table> tables = tableDao.getAllFromRestaurant(restaurant.getUid());
             restaurant.setTables(tables);
         }
+
+        restaurant.setOwner((Worker) userDao.getFromRef(restaurant.getOwnerRef()));
 
         logger.info("RestaurantDao: restaurant successfully obtained");
         return Optional.ofNullable(restaurant);
@@ -140,5 +144,9 @@ public class RestaurantDaoImpl implements Dao<Restaurant> {
     @Autowired
     public void setTableDao(TableDaoImpl tableDao) {
         this.tableDao = tableDao;
+    }
+
+    public void setUserDao(UserDaoImpl userDao) {
+        this.userDao = userDao;
     }
 }
