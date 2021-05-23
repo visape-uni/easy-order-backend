@@ -9,4 +9,5 @@ public interface TableService {
     List<Table> getTablesFromRestaurant(String restaurantId);
     Table changeState(String restaurantId, String tableId, Table table);
     Table getTable(String restaurantId, String tableId);
+    Boolean getBill(String restaurantId, String tableId);
 }

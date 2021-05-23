@@ -139,6 +139,36 @@ public class TableServiceImpl implements TableService {
         }
     }
 
+    @Override
+    public Boolean getBill(String restaurantId, String tableId) {
+        logger.info("RestaurantService: Getting bill");
+        try {
+            Optional<Table> optTable = tableDao.get(restaurantId, tableId);
+            if (optTable.isPresent()) {
+                Table table = optTable.get();
+
+                if (EasyOrderConstants.occupiedTableState.equals(table.getState())) {
+                    Map<String, Object> updateMap = new HashMap<>();
+                    updateMap.put(TABLE_STATE_KEY, EasyOrderConstants.waitingBillTableState);
+
+                    tableDao.update(restaurantId, tableId, updateMap);
+
+                    return true;
+
+                } else {
+                    throw new EasyOrderBackendException(HttpStatus.BAD_REQUEST, "Invalid table state");
+                }
+            } else {
+                throw new EasyOrderBackendException(HttpStatus.NOT_FOUND, "Table not found");
+            }
+        } catch (ExecutionException e) {
+            throw new EasyOrderBackendException(HttpStatus.INTERNAL_SERVER_ERROR, "Backend server error: Process aborted");
+        } catch (InterruptedException e) {
+            throw new EasyOrderBackendException(HttpStatus.INTERNAL_SERVER_ERROR, "Backend server error: Process interrupted");
+        }
+    }
+
+
     @Autowired
     public void setUserDao(UserDaoImpl userDao) {
         this.userDao = userDao;

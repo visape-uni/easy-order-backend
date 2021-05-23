@@ -23,6 +23,7 @@ public final class UrlEasyOrderConstants {
     public static final String changeOrderState = "/changeOrderState/{restaurantId}/{tableId}/{orderId}";
 
     public static final String changeTableState = "/changeState/{restaurantId}/{tableId}";
+    public static final String askForTheBill = "/askForTheBill/{restaurantId}/{tableId}";
 
     public static final String getTable = "/get/{restaurantId}/{tableId}";
 

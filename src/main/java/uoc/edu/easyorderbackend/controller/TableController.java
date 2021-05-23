@@ -81,6 +81,22 @@ public class TableController {
         return response;
     }
 
+    @PutMapping(UrlEasyOrderConstants.askForTheBill)
+    public ResponseEntity<Boolean> askForTheBill(@PathVariable String restaurantId, @PathVariable String tableId) {
+        logger.info("TableController: Ask for the bill");
+        ResponseEntity<Boolean> response;
+
+        if (StringUtils.isNotBlank(restaurantId) && StringUtils.isNotBlank(tableId)) {
+            Boolean getBill = tableService.getBill(restaurantId, tableId);
+            response = new ResponseEntity<>(getBill, HttpStatus.OK);
+        } else {
+            throw new EasyOrderBackendException(HttpStatus.BAD_REQUEST, "Invalid ID");
+        }
+
+        logger.info("TableController: Giving response");
+        return response;
+    }
+
     @GetMapping(UrlEasyOrderConstants.getTable)
     public ResponseEntity<Table> getTable(@PathVariable String restaurantId, @PathVariable String tableId) {
         logger.info("TableController: Get table from restaurant");
