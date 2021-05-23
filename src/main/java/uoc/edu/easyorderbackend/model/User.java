@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class User {
@@ -62,6 +63,19 @@ public class User {
 
     public void setIsClient(Boolean client) {
         isClient = client;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return uid.equals(user.uid);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uid);
     }
 
     @Override

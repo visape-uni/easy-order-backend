@@ -82,7 +82,7 @@ public class RestaurantController {
 
     @PutMapping(UrlEasyOrderConstants.removeWorkerUrl)
     public ResponseEntity<Boolean> removeWorker(@PathVariable String restaurantId, @PathVariable String workerId) {
-        logger.info("RestaurantController: Addworker");
+        logger.info("RestaurantController:RemoveWorker");
         ResponseEntity<Boolean> response;
 
         if (StringUtils.isNotBlank(restaurantId)
