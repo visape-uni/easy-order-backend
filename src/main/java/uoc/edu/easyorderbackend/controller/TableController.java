@@ -113,7 +113,9 @@ public class TableController {
     }
 
     private boolean correctState(String newState) {
-        return (newState.equals(EasyOrderConstants.emptyTableState) || newState.equals(EasyOrderConstants.occupiedTableState));
+        return (newState.equals(EasyOrderConstants.emptyTableState)
+                || newState.equals(EasyOrderConstants.occupiedTableState)
+                || newState.equals(EasyOrderConstants.paidTableState));
     }
 
     @Autowired

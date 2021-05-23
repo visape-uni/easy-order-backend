@@ -106,6 +106,21 @@ public class TableServiceImpl implements TableService {
                         orderDao.changeState(restaurantId, tableId, order.getUid(), EasyOrderConstants.canceledOrderState);
                     }
 
+                } else if (newState.equals(EasyOrderConstants.paidTableState)) {
+                    Map<String, Object> userUpdateMap = new HashMap<>();
+                    userUpdateMap.put(USER_TABLEID_KEY, "");
+
+                    String userId = optTable.get().getUserId();
+                    User user = new User();
+                    user.setUid(userId);
+                    userDao.update(user, userUpdateMap);
+
+
+                    Order order = orderDao.getLastOrderFromTable(restaurantId, tableId);
+                    if (order != null && order.getState() != null
+                            && order.getState().equals(EasyOrderConstants.notPaidOrderState)) {
+                        orderDao.changeState(restaurantId, tableId, order.getUid(), EasyOrderConstants.paidOrderState);
+                    }
                 } else {
                     throw new EasyOrderBackendException(HttpStatus.BAD_REQUEST, "Incorrect table state");
                 }
