@@ -146,6 +146,7 @@ public class RestaurantDaoImpl implements Dao<Restaurant> {
         this.tableDao = tableDao;
     }
 
+    @Autowired
     public void setUserDao(UserDaoImpl userDao) {
         this.userDao = userDao;
     }
