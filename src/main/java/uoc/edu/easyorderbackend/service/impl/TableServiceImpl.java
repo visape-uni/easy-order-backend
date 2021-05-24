@@ -162,7 +162,8 @@ public class TableServiceImpl implements TableService {
             if (optTable.isPresent()) {
                 Table table = optTable.get();
 
-                if (EasyOrderConstants.occupiedTableState.equals(table.getState())) {
+                if (EasyOrderConstants.occupiedTableState.equals(table.getState())
+                        || EasyOrderConstants.paidOrderState.equals(table.getState())) {
                     Map<String, Object> updateMap = new HashMap<>();
                     updateMap.put(TABLE_STATE_KEY, EasyOrderConstants.waitingBillTableState);
 
