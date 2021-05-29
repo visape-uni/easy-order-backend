@@ -107,14 +107,6 @@ public class TableServiceImpl implements TableService {
                     }
 
                 } else if (newState.equals(EasyOrderConstants.paidTableState)) {
-                    Map<String, Object> userUpdateMap = new HashMap<>();
-                    userUpdateMap.put(USER_TABLEID_KEY, "");
-
-                    String userId = optTable.get().getUserId();
-                    User user = new User();
-                    user.setUid(userId);
-                    userDao.update(user, userUpdateMap);
-
 
                     Order order = orderDao.getLastOrderFromTable(restaurantId, tableId);
                     if (order != null && order.getState() != null
