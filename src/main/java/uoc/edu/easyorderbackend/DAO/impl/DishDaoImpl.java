@@ -71,14 +71,15 @@ public class DishDaoImpl {
         logger.info("DishDAO: Saving dish");
         dishColRef = getCollection(restaurantId, menuId, categoryId);
 
-        if (StringUtils.isNotBlank(restaurantId) && StringUtils.isNotBlank(menuId) && StringUtils.isNotBlank(categoryId)) {
-            DocumentReference dishDocRef = dishColRef.document();
+        if (StringUtils.isNotBlank(restaurantId) && StringUtils.isNotBlank(menuId) && StringUtils.isNotBlank(categoryId)
+            && StringUtils.isNotBlank(dish.getUid())) {
+            DocumentReference dishDocRef = dishColRef.document(dish.getUid());
             dish.setUid(dishDocRef.getId());
             dishDocRef.set(dish.toMap());
             logger.info("DishDAO: dish from restaurant "+ restaurantId +" saved with ID: "+ dish.getUid());
             return dish.getUid();
         } else {
-            throw new EasyOrderBackendException(HttpStatus.BAD_REQUEST, "RestaurantId or MenuId or CategoryId is null");
+            throw new EasyOrderBackendException(HttpStatus.BAD_REQUEST, "RestaurantId or MenuId or CategoryId or DishId is null");
         }
     }
 
