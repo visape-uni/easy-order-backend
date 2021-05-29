@@ -189,7 +189,6 @@ public class Restaurant {
         if (tables != null && !tables.isEmpty()) map.put("tables", tables);
         if (menus != null && !menus.isEmpty()) map.put("menus", menus);
         if (workers != null && !workers.isEmpty()) map.put("workers", workers);
-        if (owner != null) map.put("owner", owner);
         if (ownerRef != null) map.put("ownerRef", ownerRef);
 
         return map;

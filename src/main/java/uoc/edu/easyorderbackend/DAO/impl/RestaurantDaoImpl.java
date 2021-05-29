@@ -97,8 +97,6 @@ public class RestaurantDaoImpl implements Dao<Restaurant> {
         logger.info("RestaurantDao: Saving restaurant");
         restaurantsColRef = getCollection();
 
-        // Set Owner null to avoid store to DB
-        restaurant.setOwner(null);
         String newRestaurantUid = null;
 
         if (StringUtils.isNotBlank(restaurant.getUid())) {

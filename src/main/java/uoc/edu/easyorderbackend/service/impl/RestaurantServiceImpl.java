@@ -58,9 +58,9 @@ public class RestaurantServiceImpl implements RestaurantService {
                     DocumentReference restaurantRef = restaurantDao.getReference(id);
                     worker.setRestaurantRef(restaurantRef);
 
-                    // TODO: REVISAR SI HAY QUE HACE UPDATE EN VEZ DE SAVE
                     userDao.save(worker);
 
+                    restaurant.getOwner().setIsOwner(true);
 
                 } else {
                     throw new EasyOrderBackendException(HttpStatus.NOT_FOUND, "Owner not found");
