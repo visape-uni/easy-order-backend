@@ -153,17 +153,17 @@ public class TableServiceImpl implements TableService {
             Optional<Table> optTable = tableDao.get(restaurantId, tableId);
             if (optTable.isPresent()) {
                 Table table = optTable.get();
-
-                if (EasyOrderConstants.occupiedTableState.equals(table.getState())
-                        || EasyOrderConstants.waitingBillTableState.equals(table.getState())
-                        || EasyOrderConstants.paidTableState.equals(table.getState())) {
+                if (EasyOrderConstants.occupiedTableState.equals(table.getState())) {
                     Map<String, Object> updateMap = new HashMap<>();
                     updateMap.put(TABLE_STATE_KEY, EasyOrderConstants.waitingBillTableState);
 
                     tableDao.update(restaurantId, tableId, updateMap);
 
                     return true;
+                } else if (EasyOrderConstants.waitingBillTableState.equals(table.getState())
+                        || EasyOrderConstants.paidTableState.equals(table.getState())) {
 
+                    return true;
                 } else {
                     throw new EasyOrderBackendException(HttpStatus.BAD_REQUEST, "Invalid table state");
                 }

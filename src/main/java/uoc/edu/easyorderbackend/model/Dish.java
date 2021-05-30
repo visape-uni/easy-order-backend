@@ -71,7 +71,7 @@ public class Dish {
         if (uid != null) map.put("uid", uid);
         if (name != null) map.put("name", name);
         if (description != null) map.put("description", description);
-        if (price != null) map.put("price", price);
+        if (price != null) map.put("price", price.toString());
         //if (calories != null) map.put("calories", calories);
 
         return map;
